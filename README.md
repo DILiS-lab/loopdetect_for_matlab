@@ -1,6 +1,6 @@
 # FBLDetect_for_Matlab
 
-This repository contains a suite of functions to perform feedback loop detection in ordinary differential equation (ODE) models in Matlab.
+This repository contains a suite of functions to perform feedback loop detection in ordinary differential equation (ODE) models in Matlab. Feedback loops (cycles, circuits) are paths from one node (a variable of the ODE) to itself without visiting any other node twice, and they have important regulatory functions. Together with the loop length it is also reported whether the loop is a positive or a negative feedback loop. An upper limit of the returned number of feedback loops can be entered to limit the runtime (which scales with feedback loop count).
 
 ## Quickstart
 Download and unzip the contents of this folder. Open Matlab and navigate to the dowloaded folder or add its location to the Matlab path. The following call reports (up to 10) feedback loops for an ODE system determined by a function, here *func_POSm4*, at variable values *s_star* (here these are all equal to 1, column vector). The function values are only allowed to depend on the variable values, other parameters and time have to be fixed.
