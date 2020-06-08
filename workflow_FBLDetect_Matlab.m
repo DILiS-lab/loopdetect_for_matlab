@@ -34,9 +34,11 @@ addpath(FBLDetect_Folder_Name)
 % an ordinary differential equation (ODE) system at user-defined values of 
 % the model parameters and of the modelled variables.
 %
-% This call reports (up to 10) feedback loops for an ODE system 
-% determined by function, here |func_POSm4|, (depending on time and the 4 variable
-% values only) at variable values |s_star|.
+% The following call reports (up to 10) feedback loops for an ODE system 
+% determined by a function, here |func_POSm4|, at variable values |s_star|
+% (here these are all equal to 1, column vector). The function values are 
+% only allowed to depend on the variable values, other parameters and time 
+% have to be fixed.
 %  
 s_star=[1,1,1,1]';
 klin=ones(1,8); knonlin=[2.5,3];
