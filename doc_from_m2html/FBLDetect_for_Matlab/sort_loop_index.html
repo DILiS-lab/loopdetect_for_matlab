@@ -1,0 +1,94 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of sort_loop_index</title>
+  <meta name="keywords" content="sort_loop_index">
+  <meta name="description" content="SORT_LOOP_INDEX Sort the loop indices such that the smallest index comes">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="index.html">FBLDetect_for_Matlab</a> &gt; sort_loop_index.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for FBLDetect_for_Matlab&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>sort_loop_index
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>SORT_LOOP_INDEX Sort the loop indices such that the smallest index comes</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function[loop_list_sorted]=sort_loop_index(loop_list) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment">SORT_LOOP_INDEX Sort the loop indices such that the smallest index comes
+first.
+
+ LOOP_LIST_SORTED=SORT_LOOP_INDEX(LOOP_LIST)
+ The input LOOP_LIST has the form of the output of functions from the FBLDetect
+ function suite, or at least one column named &quot;loop&quot; that contains a cell
+ array with each entry capturing the order of the node indices (integer values) forming the loop.
+
+Example
+   J = [-1 0 0 -1; 1 -1 0 1; 0 1 -1 0; 0 0 1 -1];
+   loop_t = find_loops(J);
+   loop_t.loop{1}
+   loop_t_sorted=sort_loop_index(loop_t);
+   loop_t_sorted.loop{1}
+ 
+ See also <a href="find_loops.html" class="code" title="function [loop_tab] = find_loops(A_in,max_num_loops)">FIND_LOOPS</a>, <a href="find_loops_noscc.html" class="code" title="function [loop_tab] = find_loops_noscc(A_in,max_num_loops)">FIND_LOOPS_NOSCC</a>, <a href="find_loops_vset.html" class="code" title="function[loop_rep,loop_rep_index,jac_rep,jac_rep_index]=find_loops_vset(func, vset, max_loop_num,compute_full_list)">FIND_LOOPS_VSET</a></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="compare_loop_list.html" class="code" title="function[ind_a_id,ind_a_switch,ind_a_notin,ind_b_id,ind_b_switch]=compare_loop_list(loop_list_a,loop_list_b)">compare_loop_list</a>	COMPARE_LOOP_LIST Compare two lists of loops.</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function[outvec]=sort_vector(inputvec)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function[loop_list_sorted]=sort_loop_index(loop_list)</a>
+0002 <span class="comment">%SORT_LOOP_INDEX Sort the loop indices such that the smallest index comes</span>
+0003 <span class="comment">%first.</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% LOOP_LIST_SORTED=SORT_LOOP_INDEX(LOOP_LIST)</span>
+0006 <span class="comment">% The input LOOP_LIST has the form of the output of functions from the FBLDetect</span>
+0007 <span class="comment">% function suite, or at least one column named &quot;loop&quot; that contains a cell</span>
+0008 <span class="comment">% array with each entry capturing the order of the node indices (integer values) forming the loop.</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">%Example</span>
+0011 <span class="comment">%   J = [-1 0 0 -1; 1 -1 0 1; 0 1 -1 0; 0 0 1 -1];</span>
+0012 <span class="comment">%   loop_t = find_loops(J);</span>
+0013 <span class="comment">%   loop_t.loop{1}</span>
+0014 <span class="comment">%   loop_t_sorted=sort_loop_index(loop_t);</span>
+0015 <span class="comment">%   loop_t_sorted.loop{1}</span>
+0016 <span class="comment">%</span>
+0017 <span class="comment">% See also FIND_LOOPS, FIND_LOOPS_NOSCC, FIND_LOOPS_VSET</span>
+0018 
+0019 <a name="_sub1" href="#_subfunctions" class="code">function[outvec]=sort_vector(inputvec)</a>
+0020     [a,b]=min(inputvec);
+0021     outvec=[inputvec(b:end),inputvec(2:b)];
+0022 <span class="keyword">end</span>
+0023 
+0024 loop_list_sorted_loops=cellfun(@<a href="#_sub1" class="code" title="subfunction[outvec]=sort_vector(inputvec)">sort_vector</a>,loop_list.loop,<span class="string">'UniformOutput'</span>,false);
+0025 
+0026 loop_list_sorted=loop_list;
+0027 <span class="comment">%replace the loop lists by sorted loop lists</span>
+0028 loop_list_sorted.loop=loop_list_sorted_loops;
+0029 <span class="keyword">end</span>
+0030</pre></div>
+<hr><address>Generated on Mon 08-Jun-2020 11:38:46 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

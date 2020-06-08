@@ -1,0 +1,125 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of numerical_jacobian_complex</title>
+  <meta name="keywords" content="numerical_jacobian_complex">
+  <meta name="description" content="NUMERICAL_JACOBIAN_COMPLEX Determine Jacobian matrix via finite">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="index.html">FBLDetect_for_Matlab</a> &gt; numerical_jacobian_complex.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for FBLDetect_for_Matlab&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>numerical_jacobian_complex
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>NUMERICAL_JACOBIAN_COMPLEX Determine Jacobian matrix via finite</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function[J]=numerical_jacobian_complex(func,x,epsilon) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> NUMERICAL_JACOBIAN_COMPLEX Determine Jacobian matrix via finite 
+ difference with complex step at certain variable values.
+
+ Derivative approximation using a complex step approach (a small imaginary
+ number is added) delivers more exact values than normal finite 
+ differences that use real steps (Martins et al., 2003). It is exploited 
+ that the partial deriavtive df/dx_k can be approximated by 
+ Imag(f(x+h*e_k*i))/h for h close to zero. Thereby, no difference has to 
+ be computed avoiding subtractive cancellation errors and thus improving 
+ computation accuracy.
+
+ J = NUMERICAL_JACOBIAN_COMPLEX(FUNC,X) computes the Jacobian matrix of 
+ the ODE y'=FUNC(y) (i.e. the partial derivatives of FUNC) at variable 
+ value column vector X using the complex step approach. FUNC is a function
+ handle and depends only on the variable values. The size of the matrix 
+ is length(FUNC(X)) times length(X), and is quadratic for ODE systems.
+ 
+ J = NUMERICAL_JACOBIAN(FUNC,X,EPSILON) allows to tune the stepsize
+ EPSILON (default: 1e-6).
+ 
+ Example
+   klin=[165,0.044,0.27,550,5000,78,4.4,5.1];
+   knonlin=[0.3,2];
+   J = numerical_jacobian_complex(@(x)func_POSm4(1,x,klin,knonlin),...
+       [1 2 1 1])
+
+ See also: numerical_jacobian()
+
+ References: Martins JRRA, Sturdza P, Alonso JJ. The complex-step
+ derivative approximation. ACM Trans Math Softw. 2003;29(3):245–62.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="find_loops_vset.html" class="code" title="function[loop_rep,loop_rep_index,jac_rep,jac_rep_index]=find_loops_vset(func, vset, max_loop_num,compute_full_list)">find_loops_vset</a>	FIND_LOOPS_VSET Detect feedback loops from sets of variable values of</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function[J]=numerical_jacobian_complex(func,x,epsilon)</a>
+0002 <span class="comment">% NUMERICAL_JACOBIAN_COMPLEX Determine Jacobian matrix via finite</span>
+0003 <span class="comment">% difference with complex step at certain variable values.</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% Derivative approximation using a complex step approach (a small imaginary</span>
+0006 <span class="comment">% number is added) delivers more exact values than normal finite</span>
+0007 <span class="comment">% differences that use real steps (Martins et al., 2003). It is exploited</span>
+0008 <span class="comment">% that the partial deriavtive df/dx_k can be approximated by</span>
+0009 <span class="comment">% Imag(f(x+h*e_k*i))/h for h close to zero. Thereby, no difference has to</span>
+0010 <span class="comment">% be computed avoiding subtractive cancellation errors and thus improving</span>
+0011 <span class="comment">% computation accuracy.</span>
+0012 <span class="comment">%</span>
+0013 <span class="comment">% J = NUMERICAL_JACOBIAN_COMPLEX(FUNC,X) computes the Jacobian matrix of</span>
+0014 <span class="comment">% the ODE y'=FUNC(y) (i.e. the partial derivatives of FUNC) at variable</span>
+0015 <span class="comment">% value column vector X using the complex step approach. FUNC is a function</span>
+0016 <span class="comment">% handle and depends only on the variable values. The size of the matrix</span>
+0017 <span class="comment">% is length(FUNC(X)) times length(X), and is quadratic for ODE systems.</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">% J = NUMERICAL_JACOBIAN(FUNC,X,EPSILON) allows to tune the stepsize</span>
+0020 <span class="comment">% EPSILON (default: 1e-6).</span>
+0021 <span class="comment">%</span>
+0022 <span class="comment">% Example</span>
+0023 <span class="comment">%   klin=[165,0.044,0.27,550,5000,78,4.4,5.1];</span>
+0024 <span class="comment">%   knonlin=[0.3,2];</span>
+0025 <span class="comment">%   J = numerical_jacobian_complex(@(x)func_POSm4(1,x,klin,knonlin),...</span>
+0026 <span class="comment">%       [1 2 1 1])</span>
+0027 <span class="comment">%</span>
+0028 <span class="comment">% See also: numerical_jacobian()</span>
+0029 <span class="comment">%</span>
+0030 <span class="comment">% References: Martins JRRA, Sturdza P, Alonso JJ. The complex-step</span>
+0031 <span class="comment">% derivative approximation. ACM Trans Math Softw. 2003;29(3):245–62.</span>
+0032 
+0033 
+0034 <span class="comment">%set default value for the perturbation</span>
+0035 <span class="keyword">if</span> nargin&lt;3
+0036     epsilon= 1e-6;
+0037 <span class="keyword">end</span>
+0038 
+0039     <span class="comment">%for df/dxi:</span>
+0040 <span class="keyword">for</span> k=1:length(x)
+0041     xplus=x;
+0042     xplus(k)=xplus(k)+1i*epsilon;
+0043     J_temp=imag(feval(func,xplus))/epsilon;
+0044     <span class="keyword">if</span> k==1 <span class="comment">%during the first run - initialize J</span>
+0045         J=zeros(length(J_temp),length(x));
+0046     <span class="keyword">end</span>
+0047     J(:,k)=J_temp; <span class="comment">%fill the Jacobian for df/dxi</span>
+0048 <span class="keyword">end</span>
+0049</pre></div>
+<hr><address>Generated on Mon 08-Jun-2020 11:38:46 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

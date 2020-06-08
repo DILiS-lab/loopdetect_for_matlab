@@ -1,0 +1,211 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of find_loops_vset</title>
+  <meta name="keywords" content="find_loops_vset">
+  <meta name="description" content="FIND_LOOPS_VSET Detect feedback loops from sets of variable values of">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="index.html">FBLDetect_for_Matlab</a> &gt; find_loops_vset.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for FBLDetect_for_Matlab&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>find_loops_vset
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>FIND_LOOPS_VSET Detect feedback loops from sets of variable values of</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function[loop_rep,loop_rep_index,jac_rep,jac_rep_index]=find_loops_vset(func, vset, max_loop_num,compute_full_list) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment">FIND_LOOPS_VSET Detect feedback loops from sets of variable values of
+interest.
+
+ LOOP_REP = FIND_LOOPS_VSET(FUNC, VSET, MAX_LOOP_NUM) can be used as a wrapper for the
+ functions numerical_jacobian_complex() and find_loops(). For the ODE function y'=FUNC(y),
+ it returns the loop list at column vector of variable values y=VSET. 
+ FUNC should be a function handle that depends on the variable values
+ only; parameters and time have to be set to fixed values. 
+ MAX_LOOP_NUM is an optional input parameter that restricts the maximal
+ number of reported loops (default: 1e6). LOOP_REP is a cell array of length
+ 1, LOOP_REP{1} returns the loop list as Matlab Table (formatted as in find_loops()).</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="find_edges.html" class="code" title="function[loop_ind]=find_edges(loop_list, source_node, target_node)">find_edges</a>	FIND_EDGES Find loops in a loop list that contain a certain direct</li><li><a href="find_loops.html" class="code" title="function [loop_tab] = find_loops(A_in,max_num_loops)">find_loops</a>	FIND_LOOPS Compute feedback loops from Jacobian or adjacency matrix.</li><li><a href="numerical_jacobian_complex.html" class="code" title="function[J]=numerical_jacobian_complex(func,x,epsilon)">numerical_jacobian_complex</a>	NUMERICAL_JACOBIAN_COMPLEX Determine Jacobian matrix via finite</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function[loop_rep,loop_rep_index,jac_rep,jac_rep_index]=find_loops_vset(func, vset, max_loop_num,compute_full_list)</a>
+0002 <span class="comment">%FIND_LOOPS_VSET Detect feedback loops from sets of variable values of</span>
+0003 <span class="comment">%interest.</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% LOOP_REP = FIND_LOOPS_VSET(FUNC, VSET, MAX_LOOP_NUM) can be used as a wrapper for the</span>
+0006 <span class="comment">% functions numerical_jacobian_complex() and find_loops(). For the ODE function y'=FUNC(y),</span>
+0007 <span class="comment">% it returns the loop list at column vector of variable values y=VSET.</span>
+0008 <span class="comment">% FUNC should be a function handle that depends on the variable values</span>
+0009 <span class="comment">% only; parameters and time have to be set to fixed values.</span>
+0010 <span class="comment">% MAX_LOOP_NUM is an optional input parameter that restricts the maximal</span>
+0011 <span class="comment">% number of reported loops (default: 1e6). LOOP_REP is a cell array of length</span>
+0012 <span class="comment">% 1, LOOP_REP{1} returns the loop list as Matlab Table (formatted as in find_loops()).</span>
+0013 
+0014 <span class="comment">% [LOOP_REP,LOOP_REP_INDEX]= FIND_LOOPS_VSET(FUNC, VSET)</span>
+0015 <span class="comment">% Multiple sets of variable values can be supplied to the function which reports</span>
+0016 <span class="comment">% loop lists corresponding to different classes of Jacobian matrices (those</span>
+0017 <span class="comment">% with similar sign structure). VSET can be, for example, the transposed</span>
+0018 <span class="comment">% solution vector when solving the ODE system with</span>
+0019 <span class="comment">% one of the Matlab solvers, or concatenations of other sets of</span>
+0020 <span class="comment">% variable values. For an ODE system of size _n_, the dimension of VSET should</span>
+0021 <span class="comment">% be _nxk_ with _k_ being the number of different sets of variable values at</span>
+0022 <span class="comment">% which loops should be detected (i.e. k column vectors of length n are concatenated).</span>
+0023 <span class="comment">% LOOP_REP_INDEX has length k (one entry for each set of variable values in VSET)</span>
+0024 <span class="comment">% and captures as an integer index which loop list corresponds to which set</span>
+0025 <span class="comment">% of variable values. Please note that loop lists can be identical despite</span>
+0026 <span class="comment">% belonging to different sign classes of Jacobians.</span>
+0027 <span class="comment">%</span>
+0028 <span class="comment">% [LOOP_REP,LOOP_REP_INDEX]= FIND_LOOPS_VSET(FUNC, VSET,MAX_LOOP_NUM,COMPUTE_FULL_LIST)</span>
+0029 <span class="comment">% Syntax as before. If the logical input COMPUTE_FULL_LIST is set to false (default: true),</span>
+0030 <span class="comment">% the classes of Jacobians are further reduced and loop lists are not re-computed</span>
+0031 <span class="comment">% for Jacobians that clearly do not allow for altered loop lists. This is</span>
+0032 <span class="comment">% the case if no new regulation appear and</span>
+0033 <span class="comment">% only signs of regulations are altered that are not member of any loop.</span>
+0034 <span class="comment">% Loop lists can still be identical.</span>
+0035 <span class="comment">%</span>
+0036 <span class="comment">% [LOOP_REP,LOOP_REP_INDEX,JAC_REP,JAC_REP_INDEX]= FIND_LOOPS_VSET(_)</span>
+0037 <span class="comment">% Syntax as before. JAC_REP returns the different detected signed Jacobians,</span>
+0038 <span class="comment">% JAC_REP_INDEX gives the index of the signed Jacobian for each set of</span>
+0039 <span class="comment">% variable values. Only if COMPUTE_FULL_LIST is set to false, LOOP_REP can</span>
+0040 <span class="comment">% contain</span>
+0041 <span class="comment">% fewer elements than JAC_REP, otherwise both have the same number of elements.</span>
+0042 <span class="comment">%</span>
+0043 <span class="comment">% Examples</span>
+0044 <span class="comment">% Determine the loop list for a function at one set of variable values</span>
+0045 <span class="comment">%   klin=[165,0.044,0.27,550,5000,78,4.4,5.1];</span>
+0046 <span class="comment">%   knonlin=[0.3,2];</span>
+0047 <span class="comment">%   loop_list = find_loops_vset(@(x)func_POSm4(0,x,klin,knonlin),[1 2 1 1])</span>
+0048 <span class="comment">%</span>
+0049 <span class="comment">% Determine the loop list along the solution of an ODE system, report at</span>
+0050 <span class="comment">% most 100000 loops and do not compute the loop list for all Jacobians.</span>
+0051 <span class="comment">%   sol=dlmread('li08_solution.tsv','delimiter','\t');</span>
+0052 <span class="comment">%   [loop_rep,loop_rep_index,jac_rep,jac_rep_index]=find_loops_vset(...</span>
+0053 <span class="comment">%       @(x)func(0,x), sol(2:end,:), 1e5, false)</span>
+0054 <span class="comment">% See also: FIND_LOOPS(), NUMERICAL_JACOBIAN_COMPLEX()</span>
+0055 
+0056 
+0057 <span class="comment">% Please note that reported loop lists might be identical if two sign</span>
+0058 <span class="comment">% switches occur that are both affecting always the same loops.</span>
+0059 
+0060 
+0061 
+0062 <span class="keyword">if</span> nargin&lt;3
+0063     max_loop_num=1e6;
+0064 <span class="keyword">end</span>
+0065 <span class="keyword">if</span> nargin&lt;4
+0066     compute_full_list=true;
+0067 <span class="keyword">end</span>
+0068 
+0069 <span class="comment">%determine the initial Jacobian and loop list</span>
+0070 J_ini=<a href="numerical_jacobian_complex.html" class="code" title="function[J]=numerical_jacobian_complex(func,x,epsilon)">numerical_jacobian_complex</a>(func,vset(:,1));
+0071 
+0072 vset_count=size(vset,2); <span class="comment">%how many different sets of variable values</span>
+0073 
+0074 <span class="comment">%determine all different Jacobian matrices (signs only)</span>
+0075 Jsig_tab=zeros(1,size(vset,2));
+0076 Jsig_rep={sign(J_ini)};
+0077 <span class="keyword">for</span> i=1:vset_count
+0078     J_temp=<a href="numerical_jacobian_complex.html" class="code" title="function[J]=numerical_jacobian_complex(func,x,epsilon)">numerical_jacobian_complex</a>(func,vset(:,i),1e-8);
+0079     <span class="comment">%check whether the new Jacobian is different from the Jacobians found earlier</span>
+0080     <span class="keyword">for</span> j=1:length(Jsig_rep) 
+0081         disttemp=max(max(abs(sign(J_temp)-Jsig_rep{j})));
+0082         <span class="keyword">if</span> disttemp==0 <span class="comment">%if another Jacobian is the same</span>
+0083             Jsig_tab(i)=j;
+0084             <span class="keyword">break</span>
+0085         <span class="keyword">end</span>
+0086     <span class="keyword">end</span>
+0087     <span class="keyword">if</span> Jsig_tab(i)==0 <span class="comment">%if no other Jacobian was the same before</span>
+0088         Jsig_rep{end+1}=sign(J_temp); <span class="comment">%save the Jacobian</span>
+0089         Jsig_tab(i)=length(Jsig_rep);
+0090     <span class="keyword">end</span>         
+0091 <span class="keyword">end</span>
+0092 jac_rep=Jsig_rep;
+0093 jac_rep_index=Jsig_tab;
+0094 
+0095 <span class="comment">%determine loops for the different Jacobians</span>
+0096 <span class="comment">%loops should only differ if</span>
+0097 <span class="comment">% - switch from zero no nonzero</span>
+0098 <span class="comment">% - switch of an entry that is an edge of a loop</span>
+0099 
+0100 loop_tab=zeros(1,size(vset,2));
+0101 loop_tab(Jsig_tab==1)=1; <span class="comment">%set the loop index according to the Jacobian that belongs</span>
+0102 loop_rep={<a href="find_loops.html" class="code" title="function [loop_tab] = find_loops(A_in,max_num_loops)">find_loops</a>(J_ini,max_loop_num)}; <span class="comment">%J_ini equals Jsig_rep{1}</span>
+0103 
+0104 <span class="keyword">if</span> compute_full_list <span class="comment">%if we should compute the full loop list</span>
+0105     
+0106     <span class="keyword">for</span> i=2:length(Jsig_rep) <span class="comment">%check each Jacobian (if there are more than 1)</span>
+0107         J_temp=Jsig_rep{i};
+0108         loop_rep{end+1}=<a href="find_loops.html" class="code" title="function [loop_tab] = find_loops(A_in,max_num_loops)">find_loops</a>(J_temp,max_loop_num);
+0109     <span class="keyword">end</span>
+0110     loop_tab=jac_rep_index; <span class="comment">%loop identity equals Jacobian identity</span>
+0111 
+0112 <span class="keyword">else</span> <span class="comment">%if we should not compute the full loop list, more efficient (exclude Jacobians that cannot generate different loop lists)</span>
+0113   
+0114     <span class="keyword">for</span> i=2:length(Jsig_rep) <span class="comment">%check each Jacobian (if there are more than 1)</span>
+0115         J_temp=Jsig_rep{i};
+0116         <span class="comment">%determine if there is a switch from zero to nonzero</span>
+0117         switch_to_nonzero=zeros(1,i-1);
+0118         <span class="keyword">for</span> j=1:(i-1) <span class="comment">%compare with all earlier Jacobians</span>
+0119             switch_to_nonzero(j)=sum(sum(abs(J_temp(Jsig_rep{j}==0))))&gt;0;
+0120         <span class="keyword">end</span>
+0121         <span class="comment">%determine if the sign switches of an edge that is contained in a loop</span>
+0122         change_in_a_loop=zeros(1,i-1);
+0123         <span class="keyword">for</span> j=1:(i-1) <span class="comment">%compare with all earlier Jacobians</span>
+0124             <span class="keyword">if</span> switch_to_nonzero(j)==0 <span class="comment">%we only have to check this if we don't already have another change</span>
+0125                 [target_node_ind, source_node_ind]=find(not(J_temp-Jsig_rep{j}==0));
+0126                 <span class="keyword">for</span> k=1:length(target_node_ind)
+0127                     change_in_a_loop(j)=not(isempty(<a href="find_edges.html" class="code" title="function[loop_ind]=find_edges(loop_list, source_node, target_node)">find_edges</a>(loop_rep{loop_tab(find(Jsig_tab==j,1))},<span class="keyword">...</span><span class="comment"> %the loop list corresponding to Jacobian j</span>
+0128                         source_node_ind(k),target_node_ind(k))));
+0129                     <span class="keyword">if</span> change_in_a_loop(j)==1 <span class="comment">%in case there is a change in at least one edge</span>
+0130                         <span class="keyword">break</span>
+0131                     <span class="keyword">end</span>
+0132                 <span class="keyword">end</span>
+0133             <span class="keyword">end</span>
+0134         <span class="keyword">end</span>
+0135         <span class="comment">%check if there is any earlier Jacobian that is neither changed from zero to</span>
+0136         <span class="comment">%nonzero for J_temp, nor any change in an edge of a loop is observed --&gt; this</span>
+0137         <span class="comment">%Jacobian will lead to exactly the same loops as the Jacobian of</span>
+0138         <span class="comment">%interest, J_temp</span>
+0139         loop_ind_temp=find(switch_to_nonzero==0 &amp; change_in_a_loop==0,1); <span class="comment">%find only the first Jacobian that has the same profile</span>
+0140         <span class="keyword">if</span> isempty(loop_ind_temp) <span class="comment">%in case no Jacobian coincides, we compute the loops anew</span>
+0141             loop_rep{end+1}=<a href="find_loops.html" class="code" title="function [loop_tab] = find_loops(A_in,max_num_loops)">find_loops</a>(J_temp,max_loop_num);
+0142             loop_tab(Jsig_tab==i)=length(loop_rep);
+0143         <span class="keyword">else</span> <span class="comment">%in case the Jacobian is similar to another Jacobian</span>
+0144             <span class="comment">%(e.g. because the sign switch appeared in a nonzero entry that</span>
+0145             <span class="comment">%does not generate any loop) we just use that Jacobian</span>
+0146             loop_tab(Jsig_tab==i)=loop_ind_temp;
+0147         <span class="keyword">end</span>   
+0148     <span class="keyword">end</span>
+0149 <span class="keyword">end</span>
+0150 
+0151 loop_rep_index=loop_tab;
+0152 
+0153 <span class="keyword">end</span>
+0154</pre></div>
+<hr><address>Generated on Mon 08-Jun-2020 11:38:46 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

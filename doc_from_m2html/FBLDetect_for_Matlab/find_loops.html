@@ -1,0 +1,288 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of find_loops</title>
+  <meta name="keywords" content="find_loops">
+  <meta name="description" content="FIND_LOOPS Compute feedback loops from Jacobian or adjacency matrix.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="index.html">FBLDetect_for_Matlab</a> &gt; find_loops.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for FBLDetect_for_Matlab&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>find_loops
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>FIND_LOOPS Compute feedback loops from Jacobian or adjacency matrix.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [loop_tab] = find_loops(A_in,max_num_loops) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment">FIND_LOOPS Compute feedback loops from Jacobian or adjacency matrix.
+
+ loop_tab = FIND_LOOPS(A_in, max_num_loops) returns a Matlab
+ table with three columns, 'loop', 'length', 'sign', that represents 
+ feedback loops as derived from matrix A_in.
+ 'loop' is a cell array returning the regulations, e.g. the output 
+ 1 2 3 1 means that variable 1 regulates variable 2, variable 2 regulates 
+ variable 3 and variable 3 regulates variable 1.
+ 'length' is a positive integer indicating the number of variables forming
+ the loop, i.e. the loop length.
+ 'sign' is a value in {-1,1} and indicates whether the feedback loop is 
+ negative or positive, i.e. whether the number of negative interactions
+ forming the loop is uneven or even.
+ A_in is a (Jacobian) nxn-matrix that captures the regulations of n 
+ variables on each other. Thereby, entry a_ij represents the regulation of 
+ variable i by variable j. a_ij should be non-zero only if variable j 
+ regulates variable i. The effect of the regulation (inhibition vs.
+ activation) should be encoded in the sign of a_ij. 
+ max_num_loops is an optional parameter indicating the maximal number of
+ feedback loops that are detected and returned. To limit runtime, it 
+ defaults to 1e6.
+ 
+ FIND_LOOPS uses the decomposition into strongly connected components 
+ by Tarjan's algorithm (function tarjan.m from Matlab File Exchange server)
+ and furthermore relies on Johnson's algorithm as adapted from 
+ find_elem_circuits.m by cmaes on github.
+
+ Examples
+ System of 4 variables with 4 self-loops (loops of length 1), all
+ negative, 1 positive loop of length 3 and one negative loop of length 4
+   J = [-1 0 0 -1; 1 -1 0 1; 0 1 -1 0; 0 0 1 -1];
+   loop_t = find_loops(J)
+   loop_t.loop{1} % delivers the first loop
+ Limiting the output to 4 loops:
+   loop_t = find_loops(J,4)
+
+ $Author: kabaum $  $Date: 2020/04/06 09:46 $ $Revision: 0.1 $
+ Copyright: GNU GPLv3 K. Baum 2020
+
+ See also: FIND_LOOPS_NOSCC(), find_loops_vset()</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="tarjan.html" class="code" title="function [SCC,I] = tarjan(e)">tarjan</a>	function SCC = tarjan(e)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="find_loops_vset.html" class="code" title="function[loop_rep,loop_rep_index,jac_rep,jac_rep_index]=find_loops_vset(func, vset, max_loop_num,compute_full_list)">find_loops_vset</a>	FIND_LOOPS_VSET Detect feedback loops from sets of variable values of</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function[self_loop_tab,A_red] = determine_and_remove_self_loops(C)</a></li><li><a href="#_sub2" class="code">function[A_red]=set_nonviable_nodes_to_zero(C)</a></li><li><a href="#_sub3" class="code">function unblock(u)</a></li><li><a href="#_sub4" class="code">function f = circuit(v, s, C,ind_transfer,num_loops_max)</a></li><li><a href="#_sub5" class="code">function[sign_val]=loop_sign_func(cycinds, C)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [loop_tab] = find_loops(A_in,max_num_loops)</a>
+0002 <span class="comment">%FIND_LOOPS Compute feedback loops from Jacobian or adjacency matrix.</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">% loop_tab = FIND_LOOPS(A_in, max_num_loops) returns a Matlab</span>
+0005 <span class="comment">% table with three columns, 'loop', 'length', 'sign', that represents</span>
+0006 <span class="comment">% feedback loops as derived from matrix A_in.</span>
+0007 <span class="comment">% 'loop' is a cell array returning the regulations, e.g. the output</span>
+0008 <span class="comment">% 1 2 3 1 means that variable 1 regulates variable 2, variable 2 regulates</span>
+0009 <span class="comment">% variable 3 and variable 3 regulates variable 1.</span>
+0010 <span class="comment">% 'length' is a positive integer indicating the number of variables forming</span>
+0011 <span class="comment">% the loop, i.e. the loop length.</span>
+0012 <span class="comment">% 'sign' is a value in {-1,1} and indicates whether the feedback loop is</span>
+0013 <span class="comment">% negative or positive, i.e. whether the number of negative interactions</span>
+0014 <span class="comment">% forming the loop is uneven or even.</span>
+0015 <span class="comment">% A_in is a (Jacobian) nxn-matrix that captures the regulations of n</span>
+0016 <span class="comment">% variables on each other. Thereby, entry a_ij represents the regulation of</span>
+0017 <span class="comment">% variable i by variable j. a_ij should be non-zero only if variable j</span>
+0018 <span class="comment">% regulates variable i. The effect of the regulation (inhibition vs.</span>
+0019 <span class="comment">% activation) should be encoded in the sign of a_ij.</span>
+0020 <span class="comment">% max_num_loops is an optional parameter indicating the maximal number of</span>
+0021 <span class="comment">% feedback loops that are detected and returned. To limit runtime, it</span>
+0022 <span class="comment">% defaults to 1e6.</span>
+0023 <span class="comment">%</span>
+0024 <span class="comment">% FIND_LOOPS uses the decomposition into strongly connected components</span>
+0025 <span class="comment">% by Tarjan's algorithm (function tarjan.m from Matlab File Exchange server)</span>
+0026 <span class="comment">% and furthermore relies on Johnson's algorithm as adapted from</span>
+0027 <span class="comment">% find_elem_circuits.m by cmaes on github.</span>
+0028 <span class="comment">%</span>
+0029 <span class="comment">% Examples</span>
+0030 <span class="comment">% System of 4 variables with 4 self-loops (loops of length 1), all</span>
+0031 <span class="comment">% negative, 1 positive loop of length 3 and one negative loop of length 4</span>
+0032 <span class="comment">%   J = [-1 0 0 -1; 1 -1 0 1; 0 1 -1 0; 0 0 1 -1];</span>
+0033 <span class="comment">%   loop_t = find_loops(J)</span>
+0034 <span class="comment">%   loop_t.loop{1} % delivers the first loop</span>
+0035 <span class="comment">% Limiting the output to 4 loops:</span>
+0036 <span class="comment">%   loop_t = find_loops(J,4)</span>
+0037 <span class="comment">%</span>
+0038 <span class="comment">% $Author: kabaum $  $Date: 2020/04/06 09:46 $ $Revision: 0.1 $</span>
+0039 <span class="comment">% Copyright: GNU GPLv3 K. Baum 2020</span>
+0040 <span class="comment">%</span>
+0041 <span class="comment">% See also: FIND_LOOPS_NOSCC(), find_loops_vset()</span>
+0042 
+0043 
+0044 <span class="comment">%set maximal number of reported loops (plus self-loops)</span>
+0045 <span class="keyword">if</span> nargin &lt; 2
+0046     max_num_loops = 1e6;
+0047 <span class="keyword">end</span>
+0048 
+0049 <span class="comment">%transpose (required for correct direction detection) and turn into sparse</span>
+0050 <span class="comment">%representation</span>
+0051 <span class="comment">%i.e. entry A_in(2,3) determines how species 2 is regulated by species 3</span>
+0052 <span class="keyword">if</span> ~issparse(A_in)
+0053     A = sparse(A_in'); <span class="comment">%this command alters the format of how the matrix is represented</span>
+0054 <span class="keyword">else</span>
+0055     A=A_in';
+0056 <span class="keyword">end</span>
+0057 
+0058 <span class="comment">%preparatory functions for the matrix</span>
+0059 
+0060     <a name="_sub1" href="#_subfunctions" class="code">function[self_loop_tab,A_red] = determine_and_remove_self_loops(C)</a>
+0061         <span class="comment">%determine self-loops, output as table</span>
+0062         self_loops=sign(diag(C));
+0063         self_loops_ind=find(~(self_loops==0));
+0064         self_loops=self_loops(self_loops_ind);
+0065         A_red=C-diag(diag(C)); <span class="comment">%remove diagonal entries</span>
+0066         self_loop_tab=table(<span class="keyword">...</span><span class="comment"> %write the input into result table</span>
+0067             mat2cell(cat(2,self_loops_ind,self_loops_ind),ones(length(self_loops_ind),1)),<span class="keyword">...</span>
+0068             ones(length(self_loops_ind),1),<span class="keyword">...</span>
+0069             self_loops,<span class="keyword">...</span>
+0070             <span class="string">'VariableNames'</span>,{<span class="string">'loop'</span>,<span class="string">'length'</span>,<span class="string">'sign'</span>});
+0071     <span class="keyword">end</span>
+0072 
+0073 <span class="comment">%detect nonviable_nodes and set the matrix rows &amp; columns to zero</span>
+0074     <a name="_sub2" href="#_subfunctions" class="code">function[A_red]=set_nonviable_nodes_to_zero(C)</a>
+0075         <span class="comment">%determine those variables that have no ingoing or no outgoing</span>
+0076         <span class="comment">%edges!</span>
+0077         <span class="comment">%assume that the diagonal entries have been set to zero already!</span>
+0078         nonviable_nodes=find(any(C)+any(C')&lt;2);
+0079         A_red=C;
+0080         A_red(nonviable_nodes,:)=0; <span class="comment">%set nonviable rows to zero</span>
+0081         A_red(:,nonviable_nodes)=0; <span class="comment">%set nonviable columns to zero</span>
+0082     <span class="keyword">end</span>
+0083 
+0084 <span class="comment">%preprocess A</span>
+0085 [self_loop_tab,A] = <a href="#_sub1" class="code" title="subfunction[self_loop_tab,A_red] = determine_and_remove_self_loops(C)">determine_and_remove_self_loops</a>(A); <span class="comment">%determine self-loops and eradicate diag entries</span>
+0086 [A]=<a href="#_sub2" class="code" title="subfunction[A_red]=set_nonviable_nodes_to_zero(C)">set_nonviable_nodes_to_zero</a>(A);
+0087 
+0088 <span class="comment">%now advance with determining strongly connected components</span>
+0089 <span class="comment">%function from Matlab Exchange, see licence</span>
+0090 [comp_ids]=<a href="tarjan.html" class="code" title="function [SCC,I] = tarjan(e)">tarjan</a>(A); <span class="comment">%</span>
+0091 
+0092 <span class="comment">%size of largest connected component will be used to define the blocking</span>
+0093 <span class="comment">%structures</span>
+0094 max_comp_size=length(comp_ids{1}); <span class="comment">%they are sorted by descending size, this is therefore the maximal size</span>
+0095 
+0096 <span class="comment">%functions for Johnson's algorithm (cmaes!) of simple circuit detection</span>
+0097 <span class="comment">%require global variables stack, blocked, Blist, cycles</span>
+0098 n = max_comp_size;
+0099 Blist = cell(n,1); <span class="comment">%this has something to do with blocking nodes</span>
+0100 blocked = false(1,n); <span class="comment">%whether nodes are blocked or not</span>
+0101 stack=[]; <span class="comment">%important for keeping track</span>
+0102 cycles = {}; <span class="comment">%save the cycles in there, the function circuit alters this object</span>
+0103 numcycles=size(self_loop_tab,1); <span class="comment">%keep track of found number of cycles, add detected self loops!</span>
+0104 
+0105     <a name="_sub3" href="#_subfunctions" class="code">function unblock(u)</a>
+0106         blocked(u) = false;
+0107         <span class="keyword">for</span> w=Blist{u}
+0108             <span class="keyword">if</span> blocked(w)
+0109                 <a href="#_sub3" class="code" title="subfunction unblock(u)">unblock</a>(w)
+0110             <span class="keyword">end</span>
+0111         <span class="keyword">end</span>
+0112         Blist{u} = [];
+0113     <span class="keyword">end</span>
+0114 
+0115     <a name="_sub4" href="#_subfunctions" class="code">function f = circuit(v, s, C,ind_transfer,num_loops_max) </a><span class="comment">%this function seems to detect paths from v to s in matrix C, saves them to &quot;cycle&quot;</span>
+0116         f = false;
+0117         
+0118         stack(end+1) = ind_transfer(v);
+0119         blocked(v) = true;
+0120         
+0121         <span class="keyword">for</span> w=find(C(v,:)) <span class="comment">%determine non-zero elements in row v of C</span>
+0122             <span class="keyword">if</span> w == s
+0123                 cycles{end+1} = [stack ind_transfer(s)];
+0124                 numcycles=numcycles+1; <span class="comment">%keep track of number of cycles</span>
+0125                 f = true;
+0126             <span class="keyword">elseif</span> ~blocked(w)
+0127                 <span class="keyword">if</span> <a href="#_sub4" class="code" title="subfunction f = circuit(v, s, C,ind_transfer,num_loops_max) ">circuit</a>(w, s, C, ind_transfer,num_loops_max) <span class="comment">% if there is a path from w to s</span>
+0128                     f = true;
+0129                 <span class="keyword">end</span>
+0130             <span class="keyword">end</span>
+0131             <span class="keyword">if</span> numcycles&gt;=num_loops_max <span class="comment">%leave function if we have enough FBLs detected</span>
+0132                 <span class="keyword">return</span>
+0133             <span class="keyword">end</span>
+0134         <span class="keyword">end</span>
+0135         
+0136         <span class="keyword">if</span> f
+0137             <a href="#_sub3" class="code" title="subfunction unblock(u)">unblock</a>(v)
+0138         <span class="keyword">else</span>
+0139             <span class="keyword">for</span> w = find(C(v,:))
+0140                 <span class="keyword">if</span> ~ismember(v, Blist{w})
+0141                     Bnode = Blist{w};
+0142                     Blist{w} = [Bnode v];
+0143                 <span class="keyword">end</span>
+0144             <span class="keyword">end</span>
+0145         <span class="keyword">end</span>
+0146         
+0147         stack(end) = [];
+0148     <span class="keyword">end</span>
+0149 
+0150 
+0151 <span class="comment">%go through every component of length larger than 1 - they are sorted in</span>
+0152 <span class="comment">%descending order of their sizes!</span>
+0153 i=1;
+0154 <span class="keyword">while</span> i&lt;=length(comp_ids)&amp;&amp;length(comp_ids{i})&gt;1  
+0155     
+0156     A_temp=A(comp_ids{i},comp_ids{i}); <span class="comment">%submatrix of the strongest connected component variables only</span>
+0157     
+0158     s = 2; <span class="comment">%start at node 2; we might go for starting at node n and revert the direction?</span>
+0159     <span class="keyword">while</span> s &lt;= size(A_temp,1) <span class="comment">%go from s=2 up to length of A_temp</span>
+0160         
+0161         <span class="comment">%we could also go and find connected components for each of these</span>
+0162         <span class="comment">%subgraphs! try in terms of runtime...</span>
+0163     
+0164         <span class="comment">% Subgraph of G induced by {1,...,s,}</span>
+0165         F = A_temp(1:s,1:s);
+0166         blocked(1:s) = false;
+0167         Blist(1:s) = cell(s,1);
+0168         <a href="#_sub4" class="code" title="subfunction f = circuit(v, s, C,ind_transfer,num_loops_max) ">circuit</a>(s, s, F,comp_ids{i},max_num_loops);
+0169         <span class="keyword">if</span> numcycles &gt;= max_num_loops <span class="comment">%leave the loop if enough cycles have been detected</span>
+0170             <span class="keyword">break</span>
+0171         <span class="keyword">end</span>
+0172         s = s + 1; <span class="comment">%go one species more</span>
+0173 
+0174     <span class="keyword">end</span>
+0175     <span class="keyword">if</span> numcycles &gt;= max_num_loops <span class="comment">%leave the loop if enough cycles have been detected</span>
+0176         <span class="keyword">break</span>
+0177     <span class="keyword">end</span>
+0178 i=i+1; <span class="comment">%go one connected component further</span>
+0179 <span class="keyword">end</span>
+0180 
+0181 <span class="comment">%now we have all cycles or the maximally allowed number</span>
+0182 <span class="comment">%start preparing the table</span>
+0183 
+0184 <span class="comment">%determine cycle signs</span>
+0185 
+0186 loop_length=cellfun(@length,cycles)-1;
+0187 <a name="_sub5" href="#_subfunctions" class="code">function[sign_val]=loop_sign_func(cycinds, C)</a>
+0188     <span class="comment">%determine sign from indices</span>
+0189     sign_val= mod(sum(sign(C(sub2ind(size(C),cycinds(1:(end-1)),cycinds(2:end))))&lt;1),2)<span class="keyword">...</span>
+0190         *(-2)+1;
+0191 <span class="keyword">end</span>
+0192 loop_sign=cellfun(@(x)<a href="#_sub5" class="code" title="subfunction[sign_val]=loop_sign_func(cycinds, C)">loop_sign_func</a>(x,A),cycles);
+0193 
+0194 <span class="comment">%cast the loop table and add self-loops such that at most max_num_loops are</span>
+0195 <span class="comment">%returned</span>
+0196 loop_tab=cat(1,table(cycles',loop_length',loop_sign',<span class="string">'VariableNames'</span>,{<span class="string">'loop'</span>,<span class="string">'length'</span>,<span class="string">'sign'</span>}),self_loop_tab(1:min(height(self_loop_tab),max_num_loops-numcycles),:));
+0197 
+0198 <span class="keyword">end</span>
+0199         
+0200</pre></div>
+<hr><address>Generated on Mon 08-Jun-2020 11:38:46 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>
