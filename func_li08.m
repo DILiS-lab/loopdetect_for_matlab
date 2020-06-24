@@ -1,5 +1,13 @@
 function dydt=func_li08(t,y)
 % example function: bacterial cell cycle [modelwtin(t,y), Li et al. 2008]
+% Note: To obtain the solution as published, also events have to be 
+% considered, i.e. certain conditions lead to a change in certain variable 
+% values; see Li et al., 2008 for details.
+%
+% Li S, Brazhnik P, Sobral B, Tyson JJ. A Quantitative Study of the 
+% Division Cycle of Caulobacter crescentus Stalked Cells. Plos Comput Biol. 
+% 2008;4(1):e9.
+
 %&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&%
 %%Parameters values for the equations
 
