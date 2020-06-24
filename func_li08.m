@@ -1,5 +1,5 @@
 function dydt=func_li08(t,y)
-% this was modelwtin(t, y) by Li et al 2008
+% example function: bacterial cell cycle [modelwtin(t,y), Li et al. 2008]
 %&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&%
 %%Parameters values for the equations
 

@@ -1,4 +1,4 @@
-# FBLDetect_for_Matlab
+# LoopDetect_for_Matlab
 
 This repository contains a suite of functions to perform feedback loop detection in ordinary differential equation (ODE) models in Matlab. Feedback loops (cycles, circuits) are paths from one node (a variable of the ODE) to itself without visiting any other node twice, and they have important regulatory functions. Together with the loop length it is also reported whether the loop is a positive or a negative feedback loop. An upper limit of the returned number of feedback loops can be entered to limit the runtime (which scales with feedback loop count).
 
@@ -15,13 +15,13 @@ first_loop=loop_list{1}.loop{1}
 ```
 
 ## Workflow and documentation
-A possible workflow and useful command are described in detail in the file *workflow_FBLDetect_Matlab.html* (also as pdf), that relies on the live script workflow_FBLDetect_Matlab.m.
+A possible workflow and useful command are described in detail in the file *workflow_LoopDetect_Matlab.html* (also as pdf), that relies on the live script workflow_LoopDetect_Matlab.m.
 
 Each function file contains a description with examples of usage which can be called using Matlab's *help* function. The m-files are furthermore documented in in the folder *doc_from_m2html*, documentation generated from m2html (https://www.artefact.tk/software/matlab/m2html/).
 
 ## License
 
-All code is licensed under the GNU GPLv3, FBLDetect, FBLDetect_for_Matlab, FBLDetect_for_R, FBL_Detect_for_Python, Copyright (C) 2020  Katharina Baum.
+All code is licensed under the GNU GPLv3, LoopDetect, LoopDetect_for_Matlab, LoopDetect_for_R, LoopDetect_for_Python, Copyright (C) 2020  Katharina Baum.
 
 
 

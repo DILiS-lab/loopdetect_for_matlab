@@ -1,8 +1,8 @@
-function[loop_ind]=find_edges(loop_list, source_node, target_node)
-% FIND_EDGES Find loops in a loop list that contain a certain direct 
+function[loop_ind]=find_edge(loop_list, source_node, target_node)
+% FIND_EDGE Find loops in a loop list that contain a certain direct 
 % regulation (edge).
 %
-% LOOP_IND = FIND_EGDES(LOOP_LIST, SOURCE_NODE, TARGET_NODE) 
+% LOOP_IND = FIND_EGDE(LOOP_LIST, SOURCE_NODE, TARGET_NODE) 
 % The function returns a list of indices LOOP_IND within the provided
 % list of feedback loops LOOP_LIST of the loops containing the edge from 
 % SOURCE_NODE to TARGET_NODE. 
@@ -10,7 +10,7 @@ function[loop_ind]=find_edges(loop_list, source_node, target_node)
 % Example 
 % This call would extract the indices of all loops in which variable 2 is
 % regulated by variable 1:
-% loop_edge_ind=find_edges(loop_list,1,2)
+% loop_edge_ind=find_edge(loop_list,1,2)
 % loop_list(loop_edge_ind,:) %returns the loops containing the regulation
 % from variable 2 to variable 1
 % 

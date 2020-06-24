@@ -3,7 +3,7 @@ function[loop_list_sorted]=sort_loop_index(loop_list)
 %first.
 %
 % LOOP_LIST_SORTED=SORT_LOOP_INDEX(LOOP_LIST)
-% The input LOOP_LIST has the form of the output of functions from the FBLDetect
+% The input LOOP_LIST has the form of the output of functions from the LoopDetect
 % function suite, or at least one column named "loop" that contains a cell
 % array with each entry capturing the order of the node indices (integer values) forming the loop.
 %

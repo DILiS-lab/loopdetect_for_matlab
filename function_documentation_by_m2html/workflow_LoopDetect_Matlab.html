@@ -1,0 +1,396 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of workflow_LoopDetect_Matlab</title>
+  <meta name="keywords" content="workflow_LoopDetect_Matlab">
+  <meta name="description" content="% LoopDetect: Feedback Loop Detection in ODE models in MATLAB">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="index.html">LoopDetect_for_Matlab</a> &gt; workflow_LoopDetect_Matlab.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for LoopDetect_for_Matlab&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>workflow_LoopDetect_Matlab
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>% LoopDetect: Feedback Loop Detection in ODE models in MATLAB</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment">% LoopDetect: Feedback Loop Detection in ODE models in MATLAB</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="compare_loop_list.html" class="code" title="function[ind_a_id,ind_a_switch,ind_a_notin,ind_b_id,ind_b_switch]=compare_loop_list(loop_list_a,loop_list_b)">compare_loop_list</a>	COMPARE_LOOP_LIST Compare two lists of loops.</li><li><a href="find_edge.html" class="code" title="function[loop_ind]=find_edge(loop_list, source_node, target_node)">find_edge</a>	FIND_EDGE Find loops in a loop list that contain a certain direct</li><li><a href="find_loops.html" class="code" title="function [loop_tab] = find_loops(A_in,max_num_loops)">find_loops</a>	FIND_LOOPS Compute feedback loops from Jacobian or adjacency matrix.</li><li><a href="find_loops_vset.html" class="code" title="function[loop_rep,loop_rep_index,jac_rep,jac_rep_index]=find_loops_vset(func, vset, max_num_loops,compute_full_list)">find_loops_vset</a>	FIND_LOOPS_VSET Detect feedback loops from sets of variable values of</li><li><a href="func_POSm4.html" class="code" title="function[dx]=func_POSm4(t,x,klin,knonlin)">func_POSm4</a>	example function: chain with positive regulation [Baum et al., 2016]</li><li><a href="func_li08.html" class="code" title="function dydt=func_li08(t,y)">func_li08</a>	example function: bacterial cell cycle [modelwtin(t,y), Li et al. 2008]</li><li><a href="loop_summary.html" class="code" title="function[tab]=loop_summary(fbl_loop_tab,col_val)">loop_summary</a>	LOOP_SUMMARY Compute the counts of a feedback loop list</li><li><a href="numerical_jacobian_complex.html" class="code" title="function[J]=numerical_jacobian_complex(func,x,epsilon)">numerical_jacobian_complex</a>	NUMERICAL_JACOBIAN_COMPLEX Determine Jacobian matrix via finite</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">%% LoopDetect: Feedback Loop Detection in ODE models in MATLAB</span>
+0002 
+0003 <span class="comment">%%</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% Copyright Katharina Baum, 2020.</span>
+0006 <span class="comment">% Developed for MATLAB 2019b and higher.</span>
+0007 
+0008 <span class="comment">%% Installation</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">% Download and unzip the content of the folder 'LoopDetect_for_Matlab'.</span>
+0011 <span class="comment">% Within the MATLAB session, navigate to this folder and work there or add the path of the</span>
+0012 <span class="comment">% folder to MATLAB's search path for the current MATLAB session</span>
+0013 <span class="comment">% by MATLAB's |addpath()| function. Deending on where you stored the folder,</span>
+0014 <span class="comment">% its name could be something like '/Users/Desktop/LoopDetect' on Mac or</span>
+0015 <span class="comment">% 'C:\matlab\LoopDetect' on Windows.</span>
+0016 
+0017 <span class="comment">% Retrieve the LoopDetect folder location when having navigated to the folder</span>
+0018 <span class="comment">% within the MATLAB session.</span>
+0019 LoopDetect_Folder_Name = pwd;
+0020 <span class="comment">% Add this location to MATLAB's searchpath.</span>
+0021 addpath(LoopDetect_Folder_Name)
+0022 
+0023 <span class="comment">%%</span>
+0024 <span class="comment">% Attention: The LoopDetect content</span>
+0025 <span class="comment">% will be added only for the current session. If restarting MATLAB, you</span>
+0026 <span class="comment">% will have to perform this procedure again unless the LoopDetect folder</span>
+0027 <span class="comment">% is stored in a location that already belongs to MATLAB's searchpath</span>
+0028 <span class="comment">% (view it with MATLAB's |path()|</span>
+0029 <span class="comment">% function), or you navigate to the folder and work within the folder itself.</span>
+0030 
+0031 <span class="comment">%% In brief and quick start</span>
+0032 <span class="comment">%</span>
+0033 <span class="comment">% The function suite LoopDetect enables determining all feedback loops of</span>
+0034 <span class="comment">% an ordinary differential equation (ODE) system at user-defined values of</span>
+0035 <span class="comment">% the model parameters and of the modelled variables.</span>
+0036 <span class="comment">%</span>
+0037 <span class="comment">% The following call reports (up to 10) feedback loops for an ODE system</span>
+0038 <span class="comment">% determined by a function, here |func_POSm4()|, at variable values |s_star|</span>
+0039 <span class="comment">% (here these are all equal to 1, column vector). The function values are</span>
+0040 <span class="comment">% only allowed to depend on the variable values, other parameters and time</span>
+0041 <span class="comment">% have to be fixed.</span>
+0042 <span class="comment">%</span>
+0043 s_star=[1,1,1,1]';
+0044 klin=ones(1,8); knonlin=[2.5,3];
+0045 loop_list=<a href="find_loops_vset.html" class="code" title="function[loop_rep,loop_rep_index,jac_rep,jac_rep_index]=find_loops_vset(func, vset, max_num_loops,compute_full_list)">find_loops_vset</a>(@(x)<a href="func_POSm4.html" class="code" title="function[dx]=func_POSm4(t,x,klin,knonlin)">func_POSm4</a>(1,x,klin,knonlin),s_star,10);
+0046 disp(loop_list{1})
+0047 first_loop=loop_list{1}.loop{1}
+0048 
+0049 <span class="comment">%%</span>
+0050 <span class="comment">% Here, the first loop in |loop_list|, |first_loop|, is a negative feedback</span>
+0051 <span class="comment">% loop (|sign| in the table: |-1|) of length 4</span>
+0052 <span class="comment">% in that variable 4 regulates variable 1,</span>
+0053 <span class="comment">% variable 1 regulates variable 2, variable 2 regulates variable 3, and</span>
+0054 <span class="comment">% variable 3 regulates variable 4.</span>
+0055 
+0056 <span class="comment">%% Introduction</span>
+0057 <span class="comment">%</span>
+0058 <span class="comment">% Ordinary differential equation (ODE) models are used frequently to</span>
+0059 <span class="comment">% mathematically represent biological systems. Feedback loops are important</span>
+0060 <span class="comment">% regulatory features of biological systems and can give rise to different</span>
+0061 <span class="comment">% dynamic behavior such as multistability for positive feedback loops or</span>
+0062 <span class="comment">% oscillations for negative feedback loops.</span>
+0063 <span class="comment">%</span>
+0064 <span class="comment">% The feedback loops in an ODE system can be detected with the help of its</span>
+0065 <span class="comment">% Jacobian matrix, the matrix of partial derivatives of the variables.</span>
+0066 <span class="comment">% It captures all interactions between the variables and gives rise to the</span>
+0067 <span class="comment">% interaction graph of the ODE model. In this graph, each modelled variable</span>
+0068 <span class="comment">% is a node and non-zero entries in the Jacobian matrix are (weighted)</span>
+0069 <span class="comment">% edges of the graph. Interactions can be positive or negative, according</span>
+0070 <span class="comment">% to the sign of the Jacobian matrix entry.</span>
+0071 <span class="comment">%</span>
+0072 <span class="comment">% Directed path detection in this graph is used to determine all feedback</span>
+0073 <span class="comment">% loops (in graphs also called cycles or circuits) of the system. They are</span>
+0074 <span class="comment">% marked by a set of directed interactions forming a chain in which only</span>
+0075 <span class="comment">% the first and the last node (variable) is the same. Thereby, self-loops</span>
+0076 <span class="comment">% (loops of length one) can also occur.</span>
+0077 <span class="comment">%</span>
+0078 <span class="comment">% LoopDetect allows for detection of all loops of the graph and also reports</span>
+0079 <span class="comment">% the sign of each loop, i.e. whether it is a positive feedback loop</span>
+0080 <span class="comment">% (the number of negative interactions is even) or a negative feedback loop</span>
+0081 <span class="comment">% (the number of negative interactions is uneven).</span>
+0082 <span class="comment">% The output is a table that captures the order of the variables forming</span>
+0083 <span class="comment">% the loop, their length and the sign of each loop.</span>
+0084 <span class="comment">%</span>
+0085 <span class="comment">% Except for solving the ODE system to generate variable values of interest</span>
+0086 <span class="comment">% which requires the optimization toolbox, only MATLAB base functions are</span>
+0087 <span class="comment">% employed and no further toolboxes are required. The algorithms rely on</span>
+0088 <span class="comment">% Christopher Maes' implementation of</span>
+0089 <span class="comment">% Johnson's algorithm for path detection (find_elem_circuits.m on github) and</span>
+0090 <span class="comment">% on Brandon Kuczenski's implementation of Tarjan's algorithm for detecting</span>
+0091 <span class="comment">% strongly connected components (tarjan.m, obtained from MATLAB File Exchange).</span>
+0092 <span class="comment">%</span>
+0093 <span class="comment">% Note that this tool was developed under MATLAB 2019b and that for earlier</span>
+0094 <span class="comment">% MATLAB versions, it cannot be guaranteed that LoopDetect functions or parts</span>
+0095 <span class="comment">% of this workflow run without errors.</span>
+0096 
+0097 <span class="comment">%% Solving the ODE model to generate variable values of interest</span>
+0098 
+0099 klin=[165,0.044,0.27,550,5000,78,4.4,5.1];
+0100 knonlin=[0.3,2];
+0101 [t,sol]=ode15s(@(t,x)<a href="func_POSm4.html" class="code" title="function[dx]=func_POSm4(t,x,klin,knonlin)">func_POSm4</a>(t,x,klin,knonlin),[0,50],ones(1,4));
+0102 s_star=sol(<span class="keyword">end</span>,:); <span class="comment">%the last point of the simulation is chosen</span>
+0103 
+0104 <span class="comment">%%</span>
+0105 <span class="comment">% First, the ODE model is solved for a certain set of parameters, |klin|,</span>
+0106 <span class="comment">% |knonlin|, with a</span>
+0107 <span class="comment">% numerical solver in order to determine values of interest |s_star| for the</span>
+0108 <span class="comment">% modelled variables of the ODE system. These could be steady state values,</span>
+0109 <span class="comment">% values at a specific point in time (e.g. after a stimulus) or even a set</span>
+0110 <span class="comment">% of parameter values (see section</span>
+0111 <span class="comment">% Determining loops over a set of variable values). Thus, you can skip this step if</span>
+0112 <span class="comment">% you already have a point of interest in state space, or if you want to</span>
+0113 <span class="comment">% use dummy values such as |s_star=1:4|.</span>
+0114 
+0115 <span class="comment">%% Calculating the Jacobian matrix</span>
+0116 <span class="comment">%</span>
+0117 <span class="comment">% The supplied functions |numerical_jacobian()| and</span>
+0118 <span class="comment">% |numerical_jacobian_complex()| can be used to determine numerically the Jacobian matrix</span>
+0119 <span class="comment">% of an ODE system at a certain set of values for the variables, |s_star|.</span>
+0120 <span class="comment">% The approach is that of finite differences (with real step) or</span>
+0121 <span class="comment">% complex step approach, the latter of which is supposed to deliver more exact results [Martins et al., 2003] and</span>
+0122 <span class="comment">% relies on the native implementation of complex numbers in MATLAB. The</span>
+0123 <span class="comment">% input function handle |f| (in the example derived from |func_POSm4()|,</span>
+0124 <span class="comment">% positive feedback chain model from [Baum et al., 2016]) points to a function that defines the time</span>
+0125 <span class="comment">% derivatives of the modelled variables as a vector:</span>
+0126 <span class="comment">% |f_i(s)=dS_i/dt|.</span>
+0127 <span class="comment">% When supplied to |numerical_jacobian_complex()|, it is allowed to depend only on the values of</span>
+0128 <span class="comment">% the variables; other dependencies, e.g. on parameter values, should be</span>
+0129 <span class="comment">% removed by chosing fixed values.</span>
+0130 
+0131 klin=[165,0.044,0.27,550,5000,78,4.4,5.1];
+0132 knonlin=[0.3,2];
+0133 j_matrix=<a href="numerical_jacobian_complex.html" class="code" title="function[J]=numerical_jacobian_complex(func,x,epsilon)">numerical_jacobian_complex</a>(@(s)<a href="func_POSm4.html" class="code" title="function[dx]=func_POSm4(t,x,klin,knonlin)">func_POSm4</a>(1,s,klin,knonlin),<span class="keyword">...</span>
+0134 s_star);
+0135 signed_jacobian=sign(j_matrix)
+0136     
+0137 <span class="comment">%%</span>
+0138 <span class="comment">% The (i,j)th entry of the Jacobian matrix denotes the partial derivative</span>
+0139 <span class="comment">% of variable |S_i| with respect to variable |S_j|,</span>
+0140 <span class="comment">% |J_ij=delta S_i/delta S_j|,</span>
+0141 <span class="comment">% which is positive if |S_j| has a direct positive effect on |S_i|, negative</span>
+0142 <span class="comment">% if |S_j| has a direct negative effect on |S_i| and zero if |S_j| does not</span>
+0143 <span class="comment">% have a direct effect on |S_i|. For example, the entry in row 1,</span>
+0144 <span class="comment">% column 4, |J_14|, of the matrix above is |-1|, meaning that in the</span>
+0145 <span class="comment">% underlying ODE model, variable 4 negatively regulates variable 1.</span>
+0146     
+0147 <span class="comment">%% Computing all feedback loops and useful functions for loop search</span>
+0148 <span class="comment">%</span>
+0149 <span class="comment">% The Jacobian matrix is used to compute feedback loops in the generated interaction graph.</span>
+0150 <span class="comment">% For this, the default function is |find_loops()|, in that strongly</span>
+0151 <span class="comment">% connected components are determined to reduce runtime. For smaller</span>
+0152 <span class="comment">% systems, the function |find_loops_noscc()| skips this step and thus can be</span>
+0153 <span class="comment">% faster. The optional second input argument sets an upper limit to the number of detected</span>
+0154 <span class="comment">% and reported loops and thus can prevent overly long runtime (but also</span>
+0155 <span class="comment">% potentially not all loops are returned).</span>
+0156 <span class="comment">%</span>
+0157 
+0158 loop_list=<a href="find_loops.html" class="code" title="function [loop_tab] = find_loops(A_in,max_num_loops)">find_loops</a>(j_matrix)
+0159 
+0160 <span class="comment">%%</span>
+0161 <span class="comment">% Single loops can be examined by entering the corresponding entry.</span>
+0162 
+0163 <span class="keyword">for</span> i=1:6
+0164     disp(loop_list.loop{i})
+0165 <span class="keyword">end</span>
+0166 <span class="comment">%%</span>
+0167 <span class="comment">% The function |loop_summary()| provides a convenient report on total number of</span>
+0168 <span class="comment">% loops, subdivided by their lengths and signs.</span>
+0169 
+0170 disp(<a href="loop_summary.html" class="code" title="function[tab]=loop_summary(fbl_loop_tab,col_val)">loop_summary</a>(loop_list))
+0171 <span class="comment">%%</span>
+0172 <span class="comment">% One can filter the loop list for loops containing specific variables,</span>
+0173 <span class="comment">% for example the one with index 2:</span>
+0174 noi = 2;
+0175 loops_with_node2=loop_list(<span class="keyword">...</span>
+0176     cellfun(@(z) ismember(noi,z),loop_list.loop),:)
+0177 
+0178 <span class="comment">%%</span>
+0179 <span class="comment">% Search a loop list for loops containing specific edges defined by the</span>
+0180 <span class="comment">% indices of the ingoing and outgoing nodes. This example returns the</span>
+0181 <span class="comment">% indices of all loops with a regulation of node 3 by node 2. These are</span>
+0182 <span class="comment">% only two here.</span>
+0183 <span class="comment">%</span>
+0184 loop_edge_ind=<a href="find_edge.html" class="code" title="function[loop_ind]=find_edge(loop_list, source_node, target_node)">find_edge</a>(loop_list,2,3);
+0185 loops_with_edge_2_to_3=loop_list(loop_edge_ind,:)
+0186 <span class="keyword">for</span> i=1:2
+0187     disp(loops_with_edge_2_to_3.loop{i})
+0188 <span class="keyword">end</span>
+0189 
+0190 <span class="comment">%%</span>
+0191 <span class="comment">% Saving and reading loop lists from files can be done using MATLAB's</span>
+0192 <span class="comment">% |save()| and |load()| functions. They keep the correct data format, but</span>
+0193 <span class="comment">% objects have to be retrieved from a struct.</span>
+0194 
+0195 save(<span class="string">'loop_list_example.mat'</span>, <span class="string">'loops_with_node2'</span>)
+0196 loaded_loops_with_node2=load(<span class="string">'loop_list_example.mat'</span>)
+0197 <span class="comment">% access the loaded data table from the struct (might not be required</span>
+0198 <span class="comment">% in earlier MATLAB versions)</span>
+0199 loaded_loops_with_node2.loops_with_node2
+0200 
+0201 <span class="comment">%%</span>
+0202 <span class="comment">% Reading and writing loop lists to tabular format can be performed via</span>
+0203 <span class="comment">% MATLAB's |writetable()| and |readtable()| functions. Here, we choose tabs as</span>
+0204 <span class="comment">% delimiters. Note that the formatting is lost.</span>
+0205 
+0206 writetable(loops_with_node2,<span class="string">'loop_list_example.txt'</span>,<span class="string">'Delimiter'</span>,<span class="string">'\t'</span>)
+0207 loops_with_node2_readin = readtable(<span class="string">'loop_list_example.txt'</span>)
+0208 
+0209 
+0210 <span class="comment">%% Computing feedback loops over multiple sets of variable values of interest</span>
+0211 <span class="comment">%</span>
+0212 <span class="comment">% In this example of a model of the bacterial cell cycle [Li et al., 2008],</span>
+0213 <span class="comment">% we demonstrate how feedback loops can be determined over multiple sets of</span>
+0214 <span class="comment">% variable values. Here, we focus on the solution of the ODE</span>
+0215 <span class="comment">% systems along the time axis (provided in 'li08_solution.txt').</span>
+0216 
+0217 <span class="comment">% load sets of variable values (solution to the ODE over time)</span>
+0218 sol = readmatrix(<span class="string">'li08_solution.txt'</span>);
+0219 <span class="comment">% possible alternative: sol = dlmread('li08_solution.txt');</span>
+0220 [loop_rep,loop_rep_index,jac_rep,jac_rep_index]=<a href="find_loops_vset.html" class="code" title="function[loop_rep,loop_rep_index,jac_rep,jac_rep_index]=find_loops_vset(func, vset, max_num_loops,compute_full_list)">find_loops_vset</a>(<span class="keyword">...</span>
+0221     @(x)<a href="func_li08.html" class="code" title="function dydt=func_li08(t,y)">func_li08</a>(0,x), sol(:,2:end)', 1e5, false);
+0222 
+0223 <span class="comment">%%</span>
+0224 <span class="comment">% The solutions give rise to seven different loop lists.</span>
+0225 disp(length(loop_rep))
+0226 
+0227 <span class="comment">%%</span>
+0228 <span class="comment">% Here, two examples of resulting loop lists are given (without</span>
+0229 <span class="comment">% self-loops).</span>
+0230 
+0231 loop_list_2=loop_rep{2}(loop_rep{2}.length&gt;1,:)
+0232 loop_list_7=loop_rep{7}(loop_rep{7}.length&gt;1,:)
+0233 
+0234 <span class="comment">%%</span>
+0235 <span class="comment">% These results could be plotted along the solution, e.g. by indicating a</span>
+0236 <span class="comment">% certain background color for certain specific loop lists, and analyzed</span>
+0237 <span class="comment">% further to discover reasons of changing loops. Please note that in order</span>
+0238 <span class="comment">% to obtain the sample solution in |li08_solution.txt| also event functions</span>
+0239 <span class="comment">% are required; the solution cannot be retrieved from integrating</span>
+0240 <span class="comment">% |func_li08()| alone. Please refer to the model's publication [Li et al.,</span>
+0241 <span class="comment">% 2008] for details.</span>
+0242 
+0243 
+0244 <span class="comment">%% Comparing two loop lists</span>
+0245 <span class="comment">%</span>
+0246 <span class="comment">% We might want to compare loops of two systems, e.g. as obtained in the</span>
+0247 <span class="comment">% example above. For this, we provide the function |compare_loop_list()|.</span>
+0248 <span class="comment">% Thereby, loop indices in</span>
+0249 <span class="comment">% the compared systems should point to the same variables, otherwise a meaningful</span>
+0250 <span class="comment">% comparison is not possible. This could be the case for example if we</span>
+0251 <span class="comment">% examine a system in which only one regulation has changed (for example</span>
+0252 <span class="comment">% the positive feedback chain model vs. the negative feedback chain model, [Baum et al. 2016]),</span>
+0253 <span class="comment">% or if regulations changed within one system when determining loops for</span>
+0254 <span class="comment">% multiple sets of variables of interest (along a dynamic trajectory, at</span>
+0255 <span class="comment">% different steady states of the system).</span>
+0256 
+0257 <span class="comment">% Function with positive regulation</span>
+0258 klin=[165,0.044,0.27,550,5000,78,4.4,5.1];
+0259 knonlin=[0.3,2];
+0260 j_matrix=<a href="numerical_jacobian_complex.html" class="code" title="function[J]=numerical_jacobian_complex(func,x,epsilon)">numerical_jacobian_complex</a>(@(s)<a href="func_POSm4.html" class="code" title="function[dx]=func_POSm4(t,x,klin,knonlin)">func_POSm4</a>(1,s,klin,knonlin),<span class="keyword">...</span>
+0261     s_star);
+0262 loop_list_pos=<a href="find_loops.html" class="code" title="function [loop_tab] = find_loops(A_in,max_num_loops)">find_loops</a>(j_matrix);
+0263 
+0264 <span class="comment">% Function with negative regulation. The altered regulation affects</span>
+0265 <span class="comment">% two entries of the Jacobian matrix. Parameter values and the set of</span>
+0266 <span class="comment">% variable values remain identical.</span>
+0267 j_matrix_neg=j_matrix;
+0268 j_matrix_neg(1:2,4)=-j_matrix(1:2,4);
+0269 loop_list_neg=<a href="find_loops.html" class="code" title="function [loop_tab] = find_loops(A_in,max_num_loops)">find_loops</a>(j_matrix_neg);
+0270 
+0271 <span class="comment">% compute comparison</span>
+0272 [ind_a_id,ind_a_switch,ind_a_notin,ind_b_id,ind_b_switch]=<span class="keyword">...</span>
+0273     <a href="compare_loop_list.html" class="code" title="function[ind_a_id,ind_a_switch,ind_a_notin,ind_b_id,ind_b_switch]=compare_loop_list(loop_list_a,loop_list_b)">compare_loop_list</a>(loop_list_pos,loop_list_neg);
+0274 
+0275 <span class="comment">%%</span>
+0276 <span class="comment">% Only the four self-loops remain identical in both systems.</span>
+0277 
+0278 disp(loop_list_pos(ind_a_id,:))
+0279 <span class="keyword">for</span> i=1:4
+0280     disp(loop_list_pos.loop{ind_a_id(i)})
+0281 <span class="keyword">end</span>
+0282 
+0283 <span class="comment">%%</span>
+0284 <span class="comment">% These are the corresponding loops in the negatively regulated system.</span>
+0285 
+0286 disp(loop_list_neg(ind_b_id,:))
+0287 <span class="keyword">for</span> i=1:4
+0288     disp(loop_list_neg.loop{ind_b_id(i)})
+0289 <span class="keyword">end</span>
+0290 
+0291 <span class="comment">%%</span>
+0292 <span class="comment">% Two loops are the same in both systems but they have switched their signs.</span>
+0293 
+0294 loops_switch_pos=loop_list_pos(ind_a_switch,:)
+0295 <span class="keyword">for</span> i=1:2
+0296     disp(loops_switch_pos.loop{i})
+0297 <span class="keyword">end</span>
+0298 loops_switch_neg=loop_list_neg(ind_b_switch,:)
+0299 <span class="keyword">for</span> i=1:2
+0300     disp(loops_switch_neg.loop{i})
+0301 <span class="keyword">end</span>
+0302 
+0303 <span class="comment">%%</span>
+0304 <span class="comment">% All loops in the positively regulated system do also occur in the negatively regulated</span>
+0305 <span class="comment">% system, i.e. |ind_a_notin| is empty.</span>
+0306 
+0307 ind_a_notin
+0308 
+0309 
+0310 <span class="comment">%% List of functions in LoopDetect - Alphabetical overview</span>
+0311 <span class="comment">%</span>
+0312 <span class="comment">% * |compare_loop_list| - compare two loop lists</span>
+0313 <span class="comment">% * |find_edge| - find loops with a certain edge in a loop list</span>
+0314 <span class="comment">% * |find_loops_noscc| - detect feedback loops from a Jacobian or adjacency</span>
+0315 <span class="comment">% matrix without determining strongly connected components, suitable for</span>
+0316 <span class="comment">% smaller or densely connected systems</span>
+0317 <span class="comment">% * |find_loops_vset| - detect feedback loops from a function and sets of</span>
+0318 <span class="comment">% values for the modelled variables</span>
+0319 <span class="comment">% * |find_loops| - detect feedback loops from a Jacobian or adjacency matrix</span>
+0320 <span class="comment">% * |loop_summary| - summarize loops list contents by lengths and signs</span>
+0321 <span class="comment">% * |numerical_jacobian_complex| - finite difference numerical determination of the Jacobian</span>
+0322 <span class="comment">% matrix with a complex step, provides higher accuracy than</span>
+0323 <span class="comment">% |numerical_jacobian|</span>
+0324 <span class="comment">% * |numerical_jacobian| - finite difference numerical determination of the Jacobian</span>
+0325 <span class="comment">% matrix</span>
+0326 <span class="comment">% * |sort_loop_index| - sort the reported loops to always start with the</span>
+0327 <span class="comment">% lowest node index</span>
+0328 <span class="comment">%</span>
+0329 
+0330 <span class="comment">%% References</span>
+0331 <span class="comment">%</span>
+0332 <span class="comment">% Baum K, Politi AZ, Kofahl B, Steuer R, Wolf J. Feedback, Mass</span>
+0333 <span class="comment">% Conservation and Reaction Kinetics Impact the Robustness of Cellular</span>
+0334 <span class="comment">% Oscillations. PLoS Comput Biol. 2016;12(12):e1005298.</span>
+0335 <span class="comment">%</span>
+0336 <span class="comment">% Brandon Kuczenski (2018). tarjan(e)</span>
+0337 <span class="comment">% (https://www.mathworks.com/matlabcentral/fileexchange/50707-tarjan-e),</span>
+0338 <span class="comment">% MATLAB Central File Exchange. Retrieved August 14, 2018.</span>
+0339 <span class="comment">%</span>
+0340 <span class="comment">% Li S, Brazhnik P, Sobral B, Tyson JJ. A Quantitative Study of the</span>
+0341 <span class="comment">% Division Cycle of Caulobacter crescentus Stalked Cells. Plos Comput Biol.</span>
+0342 <span class="comment">% 2008;4(1):e9.</span>
+0343 <span class="comment">%</span>
+0344 <span class="comment">% Christopher Maes (2011). find_elem_circuits.m</span>
+0345 <span class="comment">% https://gist.github.com/cmaes/1260153</span>
+0346 <span class="comment">%</span>
+0347 <span class="comment">% Martins JRRA, Sturdza P, Alonso JJ. The complex-step derivative</span>
+0348 <span class="comment">% approximation. ACM Trans Math Softw. 2003;29(3):245–62.</span>
+0349 <span class="comment">%</span></pre></div>
+<hr><address>Generated on Wed 24-Jun-2020 09:38:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

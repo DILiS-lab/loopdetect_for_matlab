@@ -1,4 +1,5 @@
 function[dx]=func_POSm4(t,x,klin,knonlin)
+    % example function: chain with positive regulation [Baum et al., 2016]
     dx=zeros(4,1);
     %J=jacob_POSm4(t,x,klin,knonlin);
     dx(1)= klin(1)-(klin(2)*(1 + (x(4)/knonlin(1))^knonlin(2))+klin(3))*x(1);
