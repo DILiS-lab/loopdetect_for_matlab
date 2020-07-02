@@ -22,7 +22,7 @@ Each function file contains a description with examples of usage which can be ca
 
 ## License
 
-All code is licensed under the GNU GPLv3, LoopDetect, LoopDetect_for_Matlab, LoopDetect_for_R, LoopDetect_for_Python, Copyright (C) 2020  Katharina Baum.
+All code is licensed under the GNU GPLv3, LoopDetect_for_Matlab, Copyright (C) 2020  Katharina Baum.
 
 
 
