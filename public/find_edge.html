@@ -1,0 +1,96 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of find_edge</title>
+  <meta name="keywords" content="find_edge">
+  <meta name="description" content="FIND_EDGE Find loops in a loop list that contain a certain direct">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="index.html">LoopDetect_for_Matlab</a> &gt; find_edge.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for LoopDetect_for_Matlab&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>find_edge
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>FIND_EDGE Find loops in a loop list that contain a certain direct</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function[loop_ind]=find_edge(loop_list, source_node, target_node) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> FIND_EDGE Find loops in a loop list that contain a certain direct 
+ regulation (edge).
+
+ LOOP_IND = FIND_EGDE(LOOP_LIST, SOURCE_NODE, TARGET_NODE) 
+ The function returns a list of indices LOOP_IND within the provided
+ list of feedback loops LOOP_LIST of the loops containing the edge from 
+ SOURCE_NODE to TARGET_NODE. 
+
+ Example 
+ This call would extract the indices of all loops in which variable 2 is
+ regulated by variable 1:
+ loop_edge_ind=find_edge(loop_list,1,2)
+ loop_list(loop_edge_ind,:) %returns the loops containing the regulation
+ from variable 2 to variable 1
+ 
+ See also: find_loops(), find_loops_noscc(), find_loops_vset()</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="find_loops_vset.html" class="code" title="function[loop_rep,loop_rep_index,jac_rep,jac_rep_index]=find_loops_vset(func, vset, max_num_loops,compute_full_list)">find_loops_vset</a>	FIND_LOOPS_VSET Detect feedback loops from sets of variable values of</li><li><a href="workflow_LoopDetect_Matlab.html" class="code" title="">workflow_LoopDetect_Matlab</a>	% LoopDetect: Feedback Loop Detection in ODE models in MATLAB</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function[loop_ind]=find_edge(loop_list, source_node, target_node)</a>
+0002 <span class="comment">% FIND_EDGE Find loops in a loop list that contain a certain direct</span>
+0003 <span class="comment">% regulation (edge).</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% LOOP_IND = FIND_EGDE(LOOP_LIST, SOURCE_NODE, TARGET_NODE)</span>
+0006 <span class="comment">% The function returns a list of indices LOOP_IND within the provided</span>
+0007 <span class="comment">% list of feedback loops LOOP_LIST of the loops containing the edge from</span>
+0008 <span class="comment">% SOURCE_NODE to TARGET_NODE.</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">% Example</span>
+0011 <span class="comment">% This call would extract the indices of all loops in which variable 2 is</span>
+0012 <span class="comment">% regulated by variable 1:</span>
+0013 <span class="comment">% loop_edge_ind=find_edge(loop_list,1,2)</span>
+0014 <span class="comment">% loop_list(loop_edge_ind,:) %returns the loops containing the regulation</span>
+0015 <span class="comment">% from variable 2 to variable 1</span>
+0016 <span class="comment">%</span>
+0017 <span class="comment">% See also: find_loops(), find_loops_noscc(), find_loops_vset()</span>
+0018 
+0019 
+0020 <span class="comment">%search source_node and its index in all loops, determine the following</span>
+0021 <span class="comment">%node index and check whether this is the target_node</span>
+0022 loops_follow_source_node_is_target_node=cellfun(@(z) isequal(z(find(z==source_node,1)+1),target_node),loop_list.loop);
+0023 
+0024 <span class="comment">%this outputs a logical array of length loop_list whose entries are</span>
+0025 <span class="comment">% - 1 if the loop contains source_node and the consecutive node is</span>
+0026 <span class="comment">% target_node</span>
+0027 <span class="comment">% - 0 if the loop does not contain source_node or if the loop contains</span>
+0028 <span class="comment">% source_node and the consecutive node is not target_node</span>
+0029 
+0030 <span class="comment">%transfer the logical array to indices of the loops (i.e. indices where</span>
+0031 <span class="comment">%the previous array is 1</span>
+0032 loop_ind=find(loops_follow_source_node_is_target_node);
+0033     
+0034 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 24-Jun-2020 09:38:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

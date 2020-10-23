@@ -1,0 +1,10 @@
+pages:
+  stage: deploy
+  script:
+  - cp -r function_documentation_by_m2html/. public
+  - cp -r workflow_LoopDetect_Matlab.html public
+  artifacts:
+    paths:
+    - public
+  only:
+  - master

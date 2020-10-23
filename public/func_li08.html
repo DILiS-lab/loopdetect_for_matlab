@@ -1,0 +1,162 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of func_li08</title>
+  <meta name="keywords" content="func_li08">
+  <meta name="description" content="example function: bacterial cell cycle [modelwtin(t,y), Li et al. 2008]">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="index.html">LoopDetect_for_Matlab</a> &gt; func_li08.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for LoopDetect_for_Matlab&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>func_li08
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>example function: bacterial cell cycle [modelwtin(t,y), Li et al. 2008]</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function dydt=func_li08(t,y) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> example function: bacterial cell cycle [modelwtin(t,y), Li et al. 2008]
+&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;%
+%Parameters values for the equations</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="workflow_LoopDetect_Matlab.html" class="code" title="">workflow_LoopDetect_Matlab</a>	% LoopDetect: Feedback Loop Detection in ODE models in MATLAB</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function dydt=func_li08(t,y)</a>
+0002 <span class="comment">% example function: bacterial cell cycle [modelwtin(t,y), Li et al. 2008]</span>
+0003 <span class="comment">%&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;%</span>
+0004 <span class="comment">%%Parameters values for the equations</span>
+0005 
+0006 ksCtrAP1=0.0083;    JiCtrACtrA=0.4;    niCtrACtrA=2;
+0007 ksCtrAP2=0.073;    JaCtrACtrA=0.45;    naCtrACtrA=2;
+0008 
+0009 kdCtrA1=0.002;
+0010 kdCtrA2=0.15;    ndCtrA2=2;
+0011 JdCtrADivKP=0.55;
+0012 
+0013 ksGcrA=0.045;    JiGcrACtrA=0.2;    niGcrACtrA=2;
+0014 
+0015 kdGcrA=0.022;
+0016 
+0017 ksFts=0.063;    kdFts=0.035;
+0018 
+0019 kzringopen=0.8;    Jaopen=0.01;
+0020 kzringclosed1=0.0001;    Jaclosed1=0.1;
+0021 kzringclosed2=0.6;    nzringclosed2=4;
+0022 JZringFts=0.78;
+0023 
+0024 ksDivK=0.0054;    ktransDivKP=0.0295;    ktransDivK=0.5;    kdDivK=0.002;
+0025 
+0026 ksI=0.08;    kdI=0.04;
+0027 
+0028 ksCcrM=0.072;    kdCcrM=0.07;
+0029 
+0030 
+0031 kaDnaA=0.0165;    JiDnaAGcrA=0.5;    niDnaAGcrA=2;
+0032 kdDnaA=0.007;
+0033 
+0034 kaIni=0.01;    JaIni=1;        naIni=4;
+0035 
+0036 thetaCtrA=0.2;    nthetaCtrA=4;
+0037 thetaDnaA=0.6;    nthetaDnaA=4;
+0038 thetaGcrA=0.45;    nthetaGcrA=4;
+0039 thetaCori=0.0002;    nthetaCori=1;
+0040 
+0041 kmcori=0.4;    Jmcori=0.95;    nmcori=4;
+0042 kmccrM=0.4;    JmccrM=0.95;    nmccrM=4;
+0043 kmctrA=0.4;    JmctrA=0.95;    nmctrA=4;
+0044 kmfts=0.4;    Jmfts=0.95;    nmfts=4;
+0045 
+0046 kelong=0.95/160;
+0047 nelong=4;
+0048 
+0049 <span class="comment">%$end of parameters</span>
+0050 <span class="comment">%&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;%</span>
+0051 <span class="comment">%%Differential equations of the model</span>
+0052 <span class="comment">%%variable map</span>
+0053 <span class="comment">%y(1)=[CtrA]</span>
+0054 <span class="comment">%y(2)=[GcrA]</span>
+0055 <span class="comment">%y(3)=[DnaA]</span>
+0056 <span class="comment">%y(4)=[Fts]</span>
+0057 <span class="comment">%y(5)=[Zring]</span>
+0058 <span class="comment">%y(6)=[DivK]</span>
+0059 <span class="comment">%y(7)=[DivK~P]</span>
+0060 <span class="comment">%y(8)=[Total DivK]</span>
+0061 <span class="comment">%y(9)=[I] (Intermediate)]</span>
+0062 <span class="comment">%y(10)=[CcrM]</span>
+0063 <span class="comment">%y(11)=[hCori] (hemimethylated Cori)</span>
+0064 <span class="comment">%y(12)=[hccrM] (hemimethylated ccrM)</span>
+0065 <span class="comment">%y(13)=[hctrA] (hemimethylated ctrA)</span>
+0066 <span class="comment">%y(14)=[hfts](hemimethylated fts)</span>
+0067 <span class="comment">%y(15)=[Ini] (Initiation)</span>
+0068 <span class="comment">%y(16)=[Elong](Elongation)</span>
+0069 <span class="comment">%y(17)=[DNA] (Total DNA)</span>
+0070 <span class="comment">%y(18)=Count (# of Chromosome)</span>
+0071 
+0072 dydt=zeros(18,1);  
+0073 
+0074 dydt(1)=(ksCtrAP1*JiCtrACtrA^niCtrACtrA/(JiCtrACtrA^niCtrACtrA+y(1)^niCtrACtrA)*y(2)+ksCtrAP2*y(1)^naCtrACtrA/(JaCtrACtrA^naCtrACtrA+y(1)^naCtrACtrA))*y(13)-(kdCtrA1+kdCtrA2*y(7)^ndCtrA2/(JdCtrADivKP^ndCtrA2+y(7)^ndCtrA2))*y(1);
+0075 
+0076 dydt(2)=(ksGcrA*JiGcrACtrA^niGcrACtrA/(JiGcrACtrA^niGcrACtrA+y(1)^niGcrACtrA)*y(3)-kdGcrA*y(2));
+0077 
+0078 dydt(3)=kaDnaA*JiDnaAGcrA^niDnaAGcrA/(JiDnaAGcrA^niDnaAGcrA+y(2)^niDnaAGcrA)*y(1)*(2-y(11))-kdDnaA*y(3);
+0079 
+0080 dydt(4)=ksFts*y(1)*y(14)-kdFts*y(4);
+0081 
+0082 dydt(5)=(kzringopen*(1-y(5))/(0.01+(1-y(5)))-(kzringclosed1+kzringclosed2*(y(4)/JZringFts)^nzringclosed2)*y(5)/(0.05+y(5)));
+0083 
+0084 dydt(6)=(ksDivK*y(1)+ktransDivKP*y(7)-ktransDivK*(1-y(5))*y(6)-kdDivK*y(6));
+0085 
+0086 dydt(7)=(-ktransDivKP*y(7)+ktransDivK*(1-y(5))*y(6)-kdDivK*y(7));
+0087 
+0088 dydt(8)=(ksDivK*y(1)-kdDivK*y(8));
+0089 
+0090 dydt(9)=ksI*y(12)*y(1)-kdI*y(9);
+0091 
+0092 dydt(10)=ksCcrM*y(9)-kdCcrM*y(10);
+0093 
+0094 dydt(11)=-kmcori*y(10)^nmcori/(Jmcori^nmcori+y(10)^nmcori)*y(11);
+0095 
+0096 dydt(12)=-kmccrM*y(10)^nmccrM/(JmccrM^nmccrM+y(10)^nmccrM)*y(12);
+0097 
+0098 dydt(13)=-kmctrA*y(10)^nmctrA/(JmctrA^nmctrA+y(10)^nmctrA)*y(13);
+0099 
+0100 dydt(14)=-kmfts*y(10)^nmfts/(Jmfts^nmfts+y(10)^nmfts)*y(14);
+0101 
+0102 dydt(15)=kaIni*(y(3)/thetaDnaA)^nthetaDnaA*(y(2)/thetaGcrA)^4/(JaIni^naIni+(y(1)/thetaCtrA)^nthetaCtrA+(y(3)/thetaDnaA)^nthetaDnaA+(y(2)/thetaGcrA)^nthetaGcrA+(y(11)/thetaCori)^nthetaCori);
+0103 
+0104 dydt(16)=kelong*y(16)^nelong/(y(16)^nelong+0.05^nelong)*y(18);
+0105 
+0106 dydt(17)=kelong*y(16)^nelong/(y(16)^nelong+0.05^nelong)*y(18);
+0107 
+0108 dydt(18)=0; <span class="comment">%count (of chromosome - is only altered at an event</span>
+0109 
+0110 <span class="comment">%%end of equations</span>
+0111 <span class="comment">%&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;%</span>
+0112 <span class="comment">%%Clear the Computing</span>
+0113 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 24-Jun-2020 09:38:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

@@ -307,7 +307,7 @@ end
 ind_a_notin
 
 
-%% List of functions in LoopDetect - Alphabetical overview
+%% List of functions in LoopDetect for MATLAB - Alphabetical overview
 % 
 % * |compare_loop_list| - compare two loop lists
 % * |find_edge| - find loops with a certain edge in a loop list
