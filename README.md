@@ -16,9 +16,9 @@ first_loop=loop_list{1}.loop{1}
 ```
 
 ## Workflow and documentation
-A possible workflow and useful command are described in detail in the file *workflow_LoopDetect_Matlab.html* (also as pdf), that relies on the live script workflow_LoopDetect_Matlab.m.
+A possible [workflow](https://kabaum.gitlab.io/fbldetect_for_matlab/workflow_LoopDetect_Matlab.html) and useful commands are described in detail (also available as [pdf](https://gitlab.com/kabaum/fbldetect_for_matlab/-/blob/master/workflow_LoopDetect_Matlab.pdf), that relies on the live script workflow_LoopDetect_Matlab.m.
 
-Each function file contains a description with examples of usage which can be called using Matlab's *help* function. The m-files are furthermore documented in in the folder *function_documentation_by_m2html*, documentation generated from m2html (https://www.artefact.tk/software/matlab/m2html/); the file *index.html* gives an overview.
+Each function file contains a description with examples of usage which can be called using Matlab's *help* function. The m-files are furthermore documented in in the folder *function_documentation_by_m2html* and can be browsed [here](https://kabaum.gitlab.io/fbldetect_for_matlab/), documentation generated from [m2html](https://www.artefact.tk/software/matlab/m2html/).
 
 ## License
 
