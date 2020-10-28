@@ -3,6 +3,9 @@
 build/
 source/
 
+#documentation stuff#
+#####################
+public/
 
 # Compiled source #
 ###################
