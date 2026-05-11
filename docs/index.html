@@ -1,0 +1,279 @@
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>LoopDetect_for_Matlab</title>
+  <meta name="description" content="MATLAB package for detecting positive and negative feedback loops in ordinary differential equation models.">
+  <meta name="robots" content="index, follow">
+
+  <link rel="stylesheet" href="loopdetect-docs.css">
+
+  <style>
+  .subtitle {
+    margin-top: -18px;
+    margin-bottom: 28px;
+    color: var(--muted);
+    font-size: 1.15rem;
+  }
+
+  .button-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin: 24px 0 32px;
+  }
+
+  .button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 16px;
+    border: 1px solid var(--accent);
+    border-radius: 999px;
+    background: #ffffff;
+    color: var(--accent);
+    font-weight: 700;
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.06);
+  }
+
+  .button:hover {
+    background: var(--accent);
+    color: #ffffff;
+    text-decoration: none;
+  }
+
+  .button.secondary {
+    border-color: var(--border);
+    color: #1f2937;
+  }
+
+  .button.secondary:hover {
+    border-color: #f4a261;
+    background: #fff7ed;
+    color: var(--accent-dark);
+  }
+
+  .button.disabled {
+    border-color: var(--border);
+    background: #f8fafc;
+    color: var(--muted);
+    cursor: default;
+  }
+
+  .button.disabled:hover {
+    background: #f8fafc;
+    color: var(--muted);
+  }
+
+  .figure {
+    margin: 28px 0 10px;
+    text-align: center;
+  }
+
+  .figure img {
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    background: #ffffff;
+  }
+
+  .caption {
+    max-width: 820px;
+    margin: 0 auto 28px;
+    color: var(--muted);
+    font-size: 0.95rem;
+    text-align: center;
+  }
+
+  .note {
+    margin: 24px 0;
+    padding: 16px 18px;
+    border-left: 4px solid var(--accent);
+    border-radius: 12px;
+    background: #fff7ed;
+  }
+
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin: 18px 0 28px;
+  }
+
+  .card {
+    padding: 18px;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    background: #f8fafc;
+  }
+
+  .card h3 {
+    margin-top: 0;
+    color: var(--accent);
+  }
+
+  @media (max-width: 760px) {
+    .cards {
+      grid-template-columns: 1fr;
+    }
+
+    .button-row {
+      display: block;
+    }
+
+    .button {
+      width: 100%;
+      margin-bottom: 10px;
+    }
+  }
+  </style>
+</head>
+
+<body>
+<div class="content">
+
+  <h1>LoopDetect_for_Matlab</h1>
+
+  <p class="subtitle">
+    A MATLAB package for detecting positive and negative feedback loops in ordinary differential equation models.
+  </p>
+
+  <div class="button-row">
+    <a class="button" href="workflow_LoopDetect_Matlab.html">Example Workflow</a>
+    <a class="button secondary" href="function_documentation_by_m2html/LoopDetect_for_Matlab/index.html">Function Documentation</a>
+    <a class="button secondary" href="https://github.com/DILiS-lab/loopdetect_for_matlab">GitHub Repository</a>
+  </div>
+
+  <p>
+    <strong>LoopDetect_for_Matlab</strong> detects feedback loops, also called cycles or circuits,
+    in ordinary differential equation (ODE) models. A feedback loop is a path from one model
+    variable back to itself without visiting any other variable more than once.
+  </p>
+
+  <p>
+    For each detected loop, the package reports the variables forming the loop, the loop length,
+    and whether the loop is positive or negative. An upper limit on the number of returned loops
+    can be specified to reduce runtime.
+  </p>
+
+  <p>
+    The package was developed using MATLAB R2019b. It uses base MATLAB functions and does not
+    require additional MATLAB toolboxes.
+  </p>
+
+  <div class="figure">
+    <img src="docs/images/loopdetect_example.png" alt="Example workflow from ODE model to detected feedback loops">
+  </div>
+  <p class="caption">
+    Example feedback-loop detection workflow: POSm4 model scheme, ODE model, and detected loops classified by length and sign.
+  </p>
+
+  <h2>Quickstart</h2>
+
+  <p>
+    Download and unzip the repository. Open MATLAB and either navigate to the downloaded folder
+    or add the folder to the MATLAB path.
+  </p>
+
+  <p>
+    The following example reports up to 10 feedback loops for an ODE system defined by
+    <code>func_POSm4</code>, evaluated at the variable values <code>s_star</code>.
+  </p>
+
+<pre><code>s_star = [1, 1, 1, 1]';
+
+klin = ones(1, 8);
+knonlin = [2.5, 3];
+t = 0;
+
+loop_list = find_loops_vset(@(x) func_POSm4(t, x, klin, knonlin), s_star, 10);
+
+% Return the full list of detected feedback loops, up to 10
+loop_list{1}
+
+% Return only the first loop
+first_loop = loop_list{1}.loop{1}</code></pre>
+
+  <div class="note">
+    The ODE function passed to <code>find_loops_vset</code> must depend only on the variable values.
+    Any additional parameters, including time, must be fixed beforehand.
+  </div>
+
+  <h2>Documentation</h2>
+
+  <div class="cards">
+    <div class="card">
+      <h3>Example workflow</h3>
+      <p>
+        Step-by-step workflow showing how to compute feedback loops from an ODE model.
+      </p>
+      <p>
+        <a href="workflow_LoopDetect_Matlab.html">Open workflow HTML</a>
+      </p>
+    </div>
+
+    <div class="card">
+      <h3>Function documentation</h3>
+      <p>
+        Automatically generated documentation for the MATLAB function files.
+      </p>
+      <p>
+        <a href="function_documentation_by_m2html/LoopDetect_for_Matlab/index.html">Open function index</a>
+      </p>
+    </div>
+
+    <div class="card">
+      <h3>PDF workflow</h3>
+      <p>
+        Printable version of the workflow documentation.
+      </p>
+      <p>
+        <a href="workflow_LoopDetect_Matlab.pdf">Open workflow PDF</a>
+      </p>
+    </div>
+  </div>
+
+  <h2>Other implementations</h2>
+
+  <p>
+    Related implementations of LoopDetect are available for other programming languages.
+  </p>
+
+  <div class="button-row">
+    <a class="button" href="https://github.com/DILiS-lab/loopdetect_for_matlab">MATLAB version</a>
+    <a class="button secondary" href="REPLACE_WITH_R_REPOSITORY_URL">R version</a>
+    <a class="button secondary" href="REPLACE_WITH_PYTHON_REPOSITORY_URL">Python version</a>
+  </div>
+
+  <p>
+    Replace the R and Python links above with the corresponding repository or documentation URLs.
+    If those versions are not public yet, keep the buttons disabled until they are ready.
+  </p>
+
+  <h2>Reporting issues</h2>
+
+  <p>
+    If you notice a bug, unclear documentation, or unexpected behavior, please report it through
+    the GitHub repository issue tracker or contact the maintainer by email.
+  </p>
+
+  <ul>
+    <li><a href="https://github.com/DILiS-lab/loopdetect_for_matlab/issues">Report an issue on GitHub</a></li>
+    <li><a href="mailto:REPLACE_WITH_EMAIL_ADDRESS">Contact by email</a></li>
+  </ul>
+
+  <h2>License</h2>
+
+  <p>
+    All code is licensed under the GNU GPLv3.
+  </p>
+
+  <p>
+    LoopDetect_for_Matlab<br>
+    Copyright &copy; 2020 Katharina Baum.
+  </p>
+
+  <div class="footer">
+    Documentation for LoopDetect_for_Matlab.
+  </div>
+
+</div>
+</body>
+</html>
