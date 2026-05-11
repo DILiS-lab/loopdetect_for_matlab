@@ -1,28 +1,64 @@
 # LoopDetect_for_Matlab
 
-This repository contains a suite of functions to perform feedback loop detection in ordinary differential equation (ODE) models in Matlab. Feedback loops (cycles, circuits) are paths from one node (a variable of the ODE) to itself without visiting any other node twice, and they have important regulatory functions. Together with the loop length it is also reported whether the loop is a positive or a negative feedback loop. An upper limit of the returned number of feedback loops can be entered to limit the runtime (which scales with feedback loop count).
-LoopDetect_for_Matlab was developed under MATLAB2019b, only relies on MATLAB base function and does not require any MATLAB toolboxes.
+LoopDetect_for_Matlab is a MATLAB package for detecting feedback loops in ordinary differential equation (ODE) models.
+
+In this package, a feedback loop, also called a cycle or circuit, is defined as a path from one node to itself without visiting any other node more than once. Nodes correspond to variables of the ODE system. For each detected loop, the package reports the loop length and whether the loop is positive or negative.
+
+An upper limit on the number of returned feedback loops can be specified to reduce runtime. Runtime scales with the number of detected feedback loops.
+
+LoopDetect_for_Matlab was developed using MATLAB R2019b. It only uses base MATLAB functions and does not require additional MATLAB toolboxes.
 
 ## Quickstart
-Download and unzip the contents of this folder. Open Matlab and navigate to the dowloaded folder or add its location to the Matlab path. The following call reports (up to 10) feedback loops for an ODE system determined by a function, here *func_POSm4*, at variable values *s_star* (here these are all equal to 1, column vector). The function values are only allowed to depend on the variable values, other parameters and time have to be fixed.
-```
-s_star=[1,1,1,1]';
-klin=ones(1,8); knonlin=[2.5,3]; t=0;
-loop_list=find_loops_vset(@(x)func_POSm4(t,x,klin,knonlin),s_star,10);
-%this returns the full list of feedback loops (up to 10)
+
+Download and unzip the repository. Open MATLAB and either navigate to the downloaded folder or add the folder to the MATLAB path.
+
+The following example reports up to 10 feedback loops for an ODE system defined by the function `func_POSm4`, evaluated at the variable values `s_star`. In this example, all variable values are set to 1.
+
+The ODE function passed to `find_loops_vset` must depend only on the variable values. Any additional parameters, including time, must be fixed beforehand.
+
+```matlab
+s_star = [1, 1, 1, 1]';
+
+klin = ones(1, 8);
+knonlin = [2.5, 3];
+t = 0;
+
+loop_list = find_loops_vset(@(x) func_POSm4(t, x, klin, knonlin), s_star, 10);
+
+% Return the full list of detected feedback loops, up to 10
 loop_list{1}
-%this returns only the first loop
-first_loop=loop_list{1}.loop{1}
+
+% Return only the first loop
+first_loop = loop_list{1}.loop{1}
 ```
+
+![Example workflow from ODE model to detected feedback loops](docs/images/loopdetect_example.png)
+
+Example workflow: POSm4 model scheme, feedback loops are detected and classified by length and sign, and the resulting loop list can be inspected.
 
 ## Workflow and documentation
-A possible [workflow](https://dilis-lab.github.io/loopdetect_for_matlab/workflow_LoopDetect_Matlab.html) and useful commands are described in detail (also available as [pdf](https://docs.google.com/viewer?url=https://raw.githubusercontent.com/DILiS-lab/loopdetect_for_matlab/master/workflow_LoopDetect_Matlab.pdf)); it relies on the live script *workflow_LoopDetect_Matlab.m*.
 
-Each function file contains a description with examples of usage which can be called using Matlab's *help* function. The m-files are furthermore documented in in the folder *function_documentation_by_m2html* and can be browsed [here](https://kabaum.gitlab.io/fbldetect_for_matlab/), documentation generated from [m2html](https://github.com/gllmflndn/m2html).
+A possible workflow and useful commands are described in detail here:
+
+- [Workflow HTML](https://dilis-lab.github.io/loopdetect_for_matlab/workflow_LoopDetect_Matlab.html)
+- [Workflow PDF](https://docs.google.com/viewer?url=https://raw.githubusercontent.com/DILiS-lab/loopdetect_for_matlab/master/workflow_LoopDetect_Matlab.pdf)
+
+The workflow is based on the live script `workflow_LoopDetect_Matlab.m`.
+
+Each function file contains a description and usage examples, which can be accessed using MATLAB's `help` function.
+
+The `.m` files are also documented in the folder `function_documentation_by_m2html`. The generated documentation can be browsed here:
+
+- [Function documentation](https://kabaum.gitlab.io/fbldetect_for_matlab/)
+
+The documentation was generated using [m2html](https://github.com/gllmflndn/m2html).
 
 ## License
 
-All code is licensed under the GNU GPLv3, LoopDetect_for_Matlab, Copyright (C) 2020  Katharina Baum.
+All code is licensed under the GNU GPLv3.
+
+LoopDetect_for_Matlab  
+Copyright (C) 2020 Katharina Baum.
 
 
 
