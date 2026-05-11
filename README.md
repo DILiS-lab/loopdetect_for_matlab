@@ -32,7 +32,7 @@ loop_list{1}
 first_loop = loop_list{1}.loop{1}
 ```
 
-![Example workflow from ODE model to detected feedback loops](docs/images/loopdetect_example.png)
+![Example workflow from ODE model to detected feedback loops](docs/img/Figures-for-Paper-edit_v0.2-01-crop.png)
 
 Example workflow: POSm4 model scheme, feedback loops are detected and classified by length and sign, and the resulting loop list can be inspected.
 
