@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Description of func_POSm4</title>
+  <meta name="keywords" content="func_POSm4">
+  <meta name="description" content="example function: chain with positive regulation [Baum et al., 2016].">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="designer" content="anhvhm, vmeomeo">
+  <meta name="robots" content="index, follow">
+  <link rel="stylesheet" href="../css/loopdetect-docs.css">
+
+  <style>
+  .subtitle {
+    margin-top: -18px;
+    margin-bottom: 28px;
+    color: var(--muted);
+    font-size: 1.15rem;
+  }
+
+  .button-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin: 24px 0 32px;
+  }
+
+  .button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 16px;
+    border: 1px solid var(--accent);
+    border-radius: 999px;
+    background: #ffffff;
+    color: var(--accent);
+    font-weight: 700;
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.06);
+  }
+
+  .button:hover {
+    background: var(--accent);
+    color: #ffffff;
+    text-decoration: none;
+  }
+
+  .button.secondary {
+    border-color: var(--border);
+    color: #1f2937;
+  }
+
+  .button.secondary:hover {
+    border-color: #f4a261;
+    background: #fff7ed;
+    color: var(--accent-dark);
+  }
+
+  .button.disabled {
+    border-color: var(--border);
+    background: #f8fafc;
+    color: var(--muted);
+    cursor: default;
+  }
+
+  .button.disabled:hover {
+    background: #f8fafc;
+    color: var(--muted);
+  }
+
+  .figure {
+    margin: 28px 0 10px;
+    text-align: center;
+  }
+
+  .figure img {
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    background: #ffffff;
+  }
+
+  .caption {
+    max-width: 820px;
+    margin: 0 auto 28px;
+    color: var(--muted);
+    font-size: 0.95rem;
+    text-align: center;
+  }
+
+  .note {
+    margin: 24px 0;
+    padding: 16px 18px;
+    border-left: 4px solid var(--accent);
+    border-radius: 12px;
+    background: #fff7ed;
+  }
+
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin: 18px 0 28px;
+  }
+
+  .card {
+    padding: 18px;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    background: #f8fafc;
+  }
+
+  .card h3 {
+    margin-top: 0;
+    color: var(--accent);
+  }
+
+  @media (max-width: 760px) {
+    .cards {
+      grid-template-columns: 1fr;
+    }
+
+    .button-row {
+      display: block;
+    }
+
+    .button {
+      width: 100%;
+      margin-bottom: 10px;
+    }
+  }
+  </style>
+</head>
+
+<body>
+<a name="_top"></a>
+
+<div class="content">
+
+  <!-- <table class="navigation">
+    <tr>
+      <td>
+        <a href="../index.html" class="nav-link nav-link-left">
+          <img alt="<" border="0" src="../img/left.svg" width="30">
+          <span>Main Page</span>
+        </a>
+      </td>
+      <td>
+        <a href="index.html" class="nav-link nav-link-right">
+          <span>Function Documentation</span>
+          <img alt=">" border="0" src="../img/right.svg" width="30">
+        </a>
+      </td>
+    </tr>
+  </table> -->
+
+  <div class="breadcrumbs">
+    <a href="../index.html">Home</a> &gt;
+    <a href="index.html">LoopDetect_for_Matlab</a> &gt;
+    func_POSm4.m
+  </div>
+
+<h1>func_POSm4
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../img/up.png" width="30"></a></h2>
+<div class="box"><strong>example function: chain with positive regulation [Baum et al., 2016]</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../img/up.png" width="30"></a></h2>
+<div class="box"><strong>function[dx]=func_POSm4(t,x,klin,knonlin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../img/up.png" width="30"></a></h2>
+<div class="fragment"><pre class="comment"> example function: chain with positive regulation [Baum et al., 2016]</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../img/up.png" width="30"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="workflow_LoopDetect_Matlab.html" class="code" title="">workflow_LoopDetect_Matlab</a>	% LoopDetect: Feedback Loop Detection in ODE models in MATLAB</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../img/up.png" width="30"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function[dx]=func_POSm4(t,x,klin,knonlin)</a>
+0002     <span class="comment">% example function: chain with positive regulation [Baum et al., 2016]</span>
+0003     dx=zeros(4,1);
+0004     <span class="comment">%J=jacob_POSm4(t,x,klin,knonlin);</span>
+0005     dx(1)= klin(1)-(klin(2)*(1 + (x(4)/knonlin(1))^knonlin(2))+klin(3))*x(1);
+0006     dx(2)= klin(2)*(1 + (x(4)/knonlin(1))^knonlin(2))*x(1) - (klin(4) + klin(5))*x(2);
+0007     dx(3)= klin(4)*x(2) - (klin(6) + klin(7))*x(3);
+0008     dx(4)= klin(6)*x(3) - klin(8)*x(4);
+0009 <span class="keyword">end</span></pre></div>
+
+<hr>
+  <address>
+    Generated on Wed 24-Jun-2020 09:38:33 by
+    <strong>
+      <a href="http://www.artefact.tk/software/matlab/m2html/" title="MATLAB Documentation in HTML">m2html</a>
+    </strong>
+    &copy; 2005
+  </address>
+</hr>
+
+</div>
+
+</body>
+</html>

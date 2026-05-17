@@ -1,0 +1,332 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Description of tarjan</title>
+  <meta name="keywords" content="tarjan">
+  <meta name="description" content="function SCC = tarjan(e)">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="designer" content="anhvhm, vmeomeo">
+  <meta name="robots" content="index, follow">
+  <link rel="stylesheet" href="../css/loopdetect-docs.css">
+
+  <style>
+  .subtitle {
+    margin-top: -18px;
+    margin-bottom: 28px;
+    color: var(--muted);
+    font-size: 1.15rem;
+  }
+
+  .button-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin: 24px 0 32px;
+  }
+
+  .button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 16px;
+    border: 1px solid var(--accent);
+    border-radius: 999px;
+    background: #ffffff;
+    color: var(--accent);
+    font-weight: 700;
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.06);
+  }
+
+  .button:hover {
+    background: var(--accent);
+    color: #ffffff;
+    text-decoration: none;
+  }
+
+  .button.secondary {
+    border-color: var(--border);
+    color: #1f2937;
+  }
+
+  .button.secondary:hover {
+    border-color: #f4a261;
+    background: #fff7ed;
+    color: var(--accent-dark);
+  }
+
+  .button.disabled {
+    border-color: var(--border);
+    background: #f8fafc;
+    color: var(--muted);
+    cursor: default;
+  }
+
+  .button.disabled:hover {
+    background: #f8fafc;
+    color: var(--muted);
+  }
+
+  .figure {
+    margin: 28px 0 10px;
+    text-align: center;
+  }
+
+  .figure img {
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    background: #ffffff;
+  }
+
+  .caption {
+    max-width: 820px;
+    margin: 0 auto 28px;
+    color: var(--muted);
+    font-size: 0.95rem;
+    text-align: center;
+  }
+
+  .note {
+    margin: 24px 0;
+    padding: 16px 18px;
+    border-left: 4px solid var(--accent);
+    border-radius: 12px;
+    background: #fff7ed;
+  }
+
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin: 18px 0 28px;
+  }
+
+  .card {
+    padding: 18px;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    background: #f8fafc;
+  }
+
+  .card h3 {
+    margin-top: 0;
+    color: var(--accent);
+  }
+
+  @media (max-width: 760px) {
+    .cards {
+      grid-template-columns: 1fr;
+    }
+
+    .button-row {
+      display: block;
+    }
+
+    .button {
+      width: 100%;
+      margin-bottom: 10px;
+    }
+  }
+  </style>
+</head>
+
+<body>
+<a name="_top"></a>
+
+<div class="content">
+
+  <!-- <table class="navigation">
+    <tr>
+      <td>
+        <a href="../index.html" class="nav-link nav-link-left">
+          <img alt="<" border="0" src="../img/left.svg" width="30">
+          <span>Main Page</span>
+        </a>
+      </td>
+      <td>
+        <a href="index.html" class="nav-link nav-link-right">
+          <span>Function Documentation</span>
+          <img alt=">" border="0" src="../img/right.svg" width="30">
+        </a>
+      </td>
+    </tr>
+  </table> -->
+
+  <div class="breadcrumbs">
+    <a href="../index.html">Home</a> &gt;
+    <a href="index.html">LoopDetect_for_Matlab</a> &gt;
+    tarjan.m
+  </div>
+
+<h1>tarjan
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../img/up.png" width="30"></a></h2>
+<div class="box"><strong>function SCC = tarjan(e)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../img/up.png" width="30"></a></h2>
+<div class="box"><strong>function [SCC,I] = tarjan(e) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../img/up.png" width="30"></a></h2>
+<div class="fragment"><pre class="comment"> function SCC = tarjan(e)
+ Implements tarjan's algorithm for a graph with adjacency matrix e.  A value in
+ e(i,j) indicates an edge from v(j) to v(i).  If this is transposed from the
+ default, well it really shouldn't matter, right? 
+
+ Returns a cell array of vectors containing scc's, sorted by descending size. The
+ length of SCC will equal the number of strongly connected components.  If (V,E) is
+ acyclic then SCC will be an Nx1 cell array of single vertices.
+
+ function [SCC,I] = tarjan(N,e)
+ also returns an Nx1 vector of indices into SCC corresponding to nodes in v.
+
+ Usage example:
+ &gt;&gt; E = sparse([2 3 4 5 5 6 6 7 8 4 9 5 10 6 9], ...
+ [1 2 2 3 4 3 5 6 4 8 8 9 9 10 6], ...
+ ones(1,15));
+ &gt;&gt; c = tarjan(E)
+ c = 
+     [1x4 double]    [1x2 double]    [7]    [3]    [2]    [1]
+ &gt;&gt; c{1}
+ ans =
+      5     6     9    10
+ &gt;&gt; 
+ &gt;&gt; 
+
+ Here E is the adjacency matrix for a directed graph, and the nodes with indices
+ 5, 6, 9, and 10 form the largest strongly connected component in the graph.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../img/up.png" width="30"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="find_loops.html" class="code" title="function [loop_tab] = find_loops(A_in,max_num_loops)">find_loops</a>	FIND_LOOPS Compute feedback loops from Jacobian or adjacency matrix.</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../img/up.png" width="30"></a></h2>
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function strongconnect(i,e)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../img/up.png" width="30"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [SCC,I] = tarjan(e)</a>
+0002 <span class="comment">% function SCC = tarjan(e)</span>
+0003 <span class="comment">% Implements tarjan's algorithm for a graph with adjacency matrix e.  A value in</span>
+0004 <span class="comment">% e(i,j) indicates an edge from v(j) to v(i).  If this is transposed from the</span>
+0005 <span class="comment">% default, well it really shouldn't matter, right?</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">% Returns a cell array of vectors containing scc's, sorted by descending size. The</span>
+0008 <span class="comment">% length of SCC will equal the number of strongly connected components.  If (V,E) is</span>
+0009 <span class="comment">% acyclic then SCC will be an Nx1 cell array of single vertices.</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">% function [SCC,I] = tarjan(N,e)</span>
+0012 <span class="comment">% also returns an Nx1 vector of indices into SCC corresponding to nodes in v.</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">% Usage example:</span>
+0015 <span class="comment">% &gt;&gt; E = sparse([2 3 4 5 5 6 6 7 8 4 9 5 10 6 9], ...</span>
+0016 <span class="comment">% [1 2 2 3 4 3 5 6 4 8 8 9 9 10 6], ...</span>
+0017 <span class="comment">% ones(1,15));</span>
+0018 <span class="comment">% &gt;&gt; c = tarjan(E)</span>
+0019 <span class="comment">% c =</span>
+0020 <span class="comment">%     [1x4 double]    [1x2 double]    [7]    [3]    [2]    [1]</span>
+0021 <span class="comment">% &gt;&gt; c{1}</span>
+0022 <span class="comment">% ans =</span>
+0023 <span class="comment">%      5     6     9    10</span>
+0024 <span class="comment">% &gt;&gt;</span>
+0025 <span class="comment">% &gt;&gt;</span>
+0026 <span class="comment">%</span>
+0027 <span class="comment">% Here E is the adjacency matrix for a directed graph, and the nodes with indices</span>
+0028 <span class="comment">% 5, 6, 9, and 10 form the largest strongly connected component in the graph.</span>
+0029 
+0030 
+0031 <span class="comment">% using globals because matlab doesn't have shared private variables</span>
+0032 <span class="keyword">global</span> tarjan_v tarjan_SCC tarjan_stack index
+0033 
+0034 tarjan_SCC={};
+0035 tarjan_stack=[];
+0036 
+0037 N=max(size(e));
+0038 
+0039 tarjan_v = struct(<span class="string">'index'</span>,num2cell(zeros(1,N)),<span class="string">'lowlink'</span>,num2cell(zeros(1,N)), <span class="keyword">...</span>
+0040                   <span class="string">'onStack'</span>,num2cell(logical(zeros(1,N))));
+0041 
+0042 index=0;
+0043 
+0044 <span class="comment">% loop through all nodes</span>
+0045 <span class="keyword">for</span> i=1:N
+0046     <span class="keyword">if</span> tarjan_v(i).index==0
+0047         <a href="#_sub1" class="code" title="subfunction strongconnect(i,e)">strongconnect</a>(i,e);
+0048     <span class="keyword">end</span>
+0049 <span class="keyword">end</span>
+0050 
+0051 <span class="comment">% generate count vector</span>
+0052 <span class="keyword">for</span> j=1:length(tarjan_SCC)
+0053     count(j)=length(tarjan_SCC{j});
+0054     tarjan_SCC{j}=sort(tarjan_SCC{j}); <span class="comment">% for convenience- sort individual components</span>
+0055 <span class="keyword">end</span>
+0056 
+0057 <span class="comment">% sort by decreasing size</span>
+0058 [~,q]=sort(count,<span class="string">'descend'</span>);
+0059 SCC=tarjan_SCC(q);
+0060 
+0061 <span class="keyword">for</span> j=1:length(SCC)
+0062     I(SCC{j})=j;
+0063 <span class="keyword">end</span>
+0064 
+0065 
+0066 <a name="_sub1" href="#_subfunctions" class="code">function strongconnect(i,e)</a>
+0067 <span class="keyword">global</span> tarjan_v tarjan_SCC tarjan_stack index
+0068 index=index+1;
+0069 
+0070 <span class="comment">% visit the node</span>
+0071 tarjan_v(i).index=index;
+0072 tarjan_v(i).lowlink=index;
+0073 tarjan_stack=[i tarjan_stack];
+0074 tarjan_v(i).onStack=true;
+0075 
+0076 <span class="keyword">if</span> size(e,2)&gt;=i
+0077     out_edges=find(e(:,i));
+0078 <span class="keyword">else</span> <span class="comment">% permit operation on rectangular matrices</span>
+0079     out_edges=[];
+0080 <span class="keyword">end</span>
+0081 
+0082 <span class="keyword">for</span> k=1:length(out_edges)
+0083     j=out_edges(k);
+0084     <span class="comment">% if not visited, visit</span>
+0085     <span class="keyword">if</span> tarjan_v(j).index==0
+0086         <a href="#_sub1" class="code" title="subfunction strongconnect(i,e)">strongconnect</a>(j,e);
+0087         <span class="comment">% carry back lowlink, if lower</span>
+0088         tarjan_v(i).lowlink=min(tarjan_v([i j]).lowlink);
+0089     <span class="keyword">elseif</span> tarjan_v(j).onStack==true
+0090         <span class="comment">% carry back index, if lower</span>
+0091         tarjan_v(i).lowlink=min([tarjan_v(i).lowlink tarjan_v(j).index]);
+0092     <span class="keyword">end</span>
+0093 <span class="keyword">end</span>
+0094 
+0095 <span class="keyword">if</span> tarjan_v(i).lowlink == tarjan_v(i).index
+0096     <span class="comment">% label a new SCC</span>
+0097     theSCC=tarjan_stack(1:find(tarjan_stack==i));
+0098     tarjan_stack=tarjan_stack(length(theSCC)+1:end);
+0099     [tarjan_v(theSCC).onStack]=deal(false);
+0100     tarjan_SCC=[tarjan_SCC {theSCC}];
+0101 <span class="keyword">end</span>
+0102 
+0103</pre></div>
+
+<hr>
+  <address>
+    Generated on Wed 24-Jun-2020 09:38:33 by
+    <strong>
+      <a href="http://www.artefact.tk/software/matlab/m2html/" title="MATLAB Documentation in HTML">m2html</a>
+    </strong>
+    &copy; 2005
+  </address>
+</hr>
+
+</div>
+
+</body>
+</html>

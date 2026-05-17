@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Description of find_edge</title>
+  <meta name="keywords" content="find_edge">
+  <meta name="description" content="FIND_EDGE Find edges in the interaction graph.">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link rel="stylesheet" href="../css/loopdetect-docs.css">
+
+  <style>
+  .subtitle {
+    margin-top: -18px;
+    margin-bottom: 28px;
+    color: var(--muted);
+    font-size: 1.15rem;
+  }
+
+  .button-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin: 24px 0 32px;
+  }
+
+  .button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 16px;
+    border: 1px solid var(--accent);
+    border-radius: 999px;
+    background: #ffffff;
+    color: var(--accent);
+    font-weight: 700;
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.06);
+  }
+
+  .button:hover {
+    background: var(--accent);
+    color: #ffffff;
+    text-decoration: none;
+  }
+
+  .button.secondary {
+    border-color: var(--border);
+    color: #1f2937;
+  }
+
+  .button.secondary:hover {
+    border-color: #f4a261;
+    background: #fff7ed;
+    color: var(--accent-dark);
+  }
+
+  .button.disabled {
+    border-color: var(--border);
+    background: #f8fafc;
+    color: var(--muted);
+    cursor: default;
+  }
+
+  .button.disabled:hover {
+    background: #f8fafc;
+    color: var(--muted);
+  }
+
+  .figure {
+    margin: 28px 0 10px;
+    text-align: center;
+  }
+
+  .figure img {
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    background: #ffffff;
+  }
+
+  .caption {
+    max-width: 820px;
+    margin: 0 auto 28px;
+    color: var(--muted);
+    font-size: 0.95rem;
+    text-align: center;
+  }
+
+  .note {
+    margin: 24px 0;
+    padding: 16px 18px;
+    border-left: 4px solid var(--accent);
+    border-radius: 12px;
+    background: #fff7ed;
+  }
+
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin: 18px 0 28px;
+  }
+
+  .card {
+    padding: 18px;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    background: #f8fafc;
+  }
+
+  .card h3 {
+    margin-top: 0;
+    color: var(--accent);
+  }
+
+  @media (max-width: 760px) {
+    .cards {
+      grid-template-columns: 1fr;
+    }
+
+    .button-row {
+      display: block;
+    }
+
+    .button {
+      width: 100%;
+      margin-bottom: 10px;
+    }
+  }
+  </style>
+</head>
+
+<body>
+<a name="_top"></a>
+
+<div class="content">
+
+  <!-- <table class="navigation">
+    <tr>
+      <td>
+        <a href="../index.html" class="nav-link nav-link-left">
+          <img alt="<" border="0" src="../img/left.svg" width="30">
+          <span>Main Page</span>
+        </a>
+      </td>
+      <td>
+        <a href="index.html" class="nav-link nav-link-right">
+          <span>Function Documentation</span>
+          <img alt=">" border="0" src="../img/right.svg" width="30">
+        </a>
+      </td>
+    </tr>
+  </table> -->
+
+  <div class="breadcrumbs">
+    <a href="../index.html">Home</a> &gt;
+    <a href="index.html">LoopDetect_for_Matlab</a> &gt;
+    find_edge.m
+  </div>
+
+<h1>find_edge
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../img/up.png" width="30px"></a></h2>
+<div class="box"><strong>FIND_EDGE Reports which loops in a loop list contain a certain edge.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../img/up.png" width="30px"></a></h2>
+<div class="box"><strong>function[loop_ind]=find_edge(loop_list, source_node, target_node) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../img/up.png" width="30px"></a></h2>
+<div class="fragment"><pre class="comment"> FIND_EDGE Find loops in a loop list that contain a certain direct 
+ regulation (edge).
+
+ LOOP_IND = FIND_EGDE(LOOP_LIST, SOURCE_NODE, TARGET_NODE) 
+ The function returns a list of indices LOOP_IND within the provided
+ list of feedback loops LOOP_LIST of the loops containing the edge from 
+ SOURCE_NODE to TARGET_NODE. 
+
+ Example 
+ This call would extract the indices of all loops in which variable 2 is
+ regulated by variable 1:
+ loop_edge_ind=find_edge(loop_list,1,2)
+ loop_list(loop_edge_ind,:) %returns the loops containing the regulation
+ from variable 2 to variable 1
+ 
+ See also: find_loops(), find_loops_noscc(), find_loops_vset()</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../img/up.png" width="30px"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="find_loops_vset.html" class="code" title="function[loop_rep,loop_rep_index,jac_rep,jac_rep_index]=find_loops_vset(func, vset, max_num_loops,compute_full_list)">find_loops_vset</a>	FIND_LOOPS_VSET Detect feedback loops from sets of variable values of</li><li><a href="workflow_LoopDetect_Matlab.html" class="code" title="">workflow_LoopDetect_Matlab</a>	% LoopDetect: Feedback Loop Detection in ODE models in MATLAB</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../img/up.png" width="30px"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function[loop_ind]=find_edge(loop_list, source_node, target_node)</a>
+0002 <span class="comment">% FIND_EDGE Find loops in a loop list that contain a certain direct</span>
+0003 <span class="comment">% regulation (edge).</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% LOOP_IND = FIND_EGDE(LOOP_LIST, SOURCE_NODE, TARGET_NODE)</span>
+0006 <span class="comment">% The function returns a list of indices LOOP_IND within the provided</span>
+0007 <span class="comment">% list of feedback loops LOOP_LIST of the loops containing the edge from</span>
+0008 <span class="comment">% SOURCE_NODE to TARGET_NODE.</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">% Example</span>
+0011 <span class="comment">% This call would extract the indices of all loops in which variable 2 is</span>
+0012 <span class="comment">% regulated by variable 1:</span>
+0013 <span class="comment">% loop_edge_ind=find_edge(loop_list,1,2)</span>
+0014 <span class="comment">% loop_list(loop_edge_ind,:) %returns the loops containing the regulation</span>
+0015 <span class="comment">% from variable 2 to variable 1</span>
+0016 <span class="comment">%</span>
+0017 <span class="comment">% See also: find_loops(), find_loops_noscc(), find_loops_vset()</span>
+0018 
+0019 
+0020 <span class="comment">%search source_node and its index in all loops, determine the following</span>
+0021 <span class="comment">%node index and check whether this is the target_node</span>
+0022 loops_follow_source_node_is_target_node=cellfun(@(z) isequal(z(find(z==source_node,1)+1),target_node),loop_list.loop);
+0023 
+0024 <span class="comment">%this outputs a logical array of length loop_list whose entries are</span>
+0025 <span class="comment">% - 1 if the loop contains source_node and the consecutive node is</span>
+0026 <span class="comment">% target_node</span>
+0027 <span class="comment">% - 0 if the loop does not contain source_node or if the loop contains</span>
+0028 <span class="comment">% source_node and the consecutive node is not target_node</span>
+0029 
+0030 <span class="comment">%transfer the logical array to indices of the loops (i.e. indices where</span>
+0031 <span class="comment">%the previous array is 1</span>
+0032 loop_ind=find(loops_follow_source_node_is_target_node);
+0033     
+0034 <span class="keyword">end</span></pre>
+
+</div>
+
+<hr>
+  <address>
+    Generated on Wed 24-Jun-2020 09:38:33 by
+    <strong>
+      <a href="http://www.artefact.tk/software/matlab/m2html/" title="MATLAB Documentation in HTML">m2html</a>
+    </strong>
+    &copy; 2005
+  </address>
+</hr>
+
+</div>
+
+</body>
+</html>

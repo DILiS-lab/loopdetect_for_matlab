@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Description of numerical_jacobian</title>
+  <meta name="keywords" content="numerical_jacobian">
+  <meta name="description" content="NUMERICAL_JACOBIAN Determine Jacobian matrix via finite difference at">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="designer" content="anhvhm, vmeomeo">
+  <meta name="robots" content="index, follow">
+  <link rel="stylesheet" href="../css/loopdetect-docs.css">
+
+  <style>
+  .subtitle {
+    margin-top: -18px;
+    margin-bottom: 28px;
+    color: var(--muted);
+    font-size: 1.15rem;
+  }
+
+  .button-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin: 24px 0 32px;
+  }
+
+  .button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 16px;
+    border: 1px solid var(--accent);
+    border-radius: 999px;
+    background: #ffffff;
+    color: var(--accent);
+    font-weight: 700;
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.06);
+  }
+
+  .button:hover {
+    background: var(--accent);
+    color: #ffffff;
+    text-decoration: none;
+  }
+
+  .button.secondary {
+    border-color: var(--border);
+    color: #1f2937;
+  }
+
+  .button.secondary:hover {
+    border-color: #f4a261;
+    background: #fff7ed;
+    color: var(--accent-dark);
+  }
+
+  .button.disabled {
+    border-color: var(--border);
+    background: #f8fafc;
+    color: var(--muted);
+    cursor: default;
+  }
+
+  .button.disabled:hover {
+    background: #f8fafc;
+    color: var(--muted);
+  }
+
+  .figure {
+    margin: 28px 0 10px;
+    text-align: center;
+  }
+
+  .figure img {
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    background: #ffffff;
+  }
+
+  .caption {
+    max-width: 820px;
+    margin: 0 auto 28px;
+    color: var(--muted);
+    font-size: 0.95rem;
+    text-align: center;
+  }
+
+  .note {
+    margin: 24px 0;
+    padding: 16px 18px;
+    border-left: 4px solid var(--accent);
+    border-radius: 12px;
+    background: #fff7ed;
+  }
+
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin: 18px 0 28px;
+  }
+
+  .card {
+    padding: 18px;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    background: #f8fafc;
+  }
+
+  .card h3 {
+    margin-top: 0;
+    color: var(--accent);
+  }
+
+  @media (max-width: 760px) {
+    .cards {
+      grid-template-columns: 1fr;
+    }
+
+    .button-row {
+      display: block;
+    }
+
+    .button {
+      width: 100%;
+      margin-bottom: 10px;
+    }
+  }
+  </style>
+</head>
+
+<body>
+<a name="_top"></a>
+
+<div class="content">
+
+  <!-- <table class="navigation">
+    <tr>
+      <td>
+        <a href="../index.html" class="nav-link nav-link-left">
+          <img alt="<" border="0" src="../img/left.svg" width="30">
+          <span>Main Page</span>
+        </a>
+      </td>
+      <td>
+        <a href="index.html" class="nav-link nav-link-right">
+          <span>Function Documentation</span>
+          <img alt=">" border="0" src="../img/right.svg" width="30">
+        </a>
+      </td>
+    </tr>
+  </table> -->
+
+  <div class="breadcrumbs">
+    <a href="../index.html">Home</a> &gt;
+    <a href="index.html">LoopDetect_for_Matlab</a> &gt;
+    numerical_jacobian.m
+  </div>
+
+<h1>numerical_jacobian
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../img/up.png" width="30"></a></h2>
+<div class="box"><strong>NUMERICAL_JACOBIAN Determine Jacobian matrix via finite difference at</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../img/up.png" width="30"></a></h2>
+<div class="box"><strong>function[J]=numerical_jacobian(func,x,epsilon,method) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../img/up.png" width="30"></a></h2>
+<div class="fragment"><pre class="comment"> NUMERICAL_JACOBIAN Determine Jacobian matrix via finite difference at
+ certain variable values.
+
+ J = NUMERICAL_JACOBIAN(FUNC,X) computes the Jacobian matrix of the ODE 
+ y'=FUNC(y) (i.e. the partial derivatives of FUNC) at variable value 
+ column vector X. FUNC is a function handle and depends only on the 
+ variable values. Implemented is the finite difference approach in that
+ df/dx_k is approximated by 1/e_k * (FUNC(X+h*e_k/2)-FUNC(X-h*e_k/2)) 
+ (centered differences) with sufficiently small stepsize h. The size of 
+ the matrix will be length(FUNC(X)) times length(X), and is usually 
+ quadratic for ODE systems.
+ 
+ J = NUMERICAL_JACOBIAN(FUNC,X,EPSILON,METHOD) allows to tune the stepsize
+ EPSILON (default: 1e-6) and to deviate from the default of centered 
+ differences by setting METHOD to 'forward' for forward differences 
+ (FUNC(X+EPSILON*e_k)-FUNC(X)) or to 'backward' for backward differences 
+ in the derivative computation (FUNC(X)-FUNC(X-EPSILON*e_k)). Note that 
+ centered differences are considered to be more exact in general than the 
+ other two. However, if variable values are close to or at zero, forward 
+ differences could be more appropriate to capture the function behavior. 
+ 
+ Example
+   J = numerical_jacobian(@(x)func_POSm4(1,x,klin,knonlin),[1 2 1 1])
+
+ See also: numerical_jacobian_complex()</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../img/up.png" width="30"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../img/up.png" width="30"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function[J]=numerical_jacobian(func,x,epsilon,method)</a>
+0002 <span class="comment">% NUMERICAL_JACOBIAN Determine Jacobian matrix via finite difference at</span>
+0003 <span class="comment">% certain variable values.</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% J = NUMERICAL_JACOBIAN(FUNC,X) computes the Jacobian matrix of the ODE</span>
+0006 <span class="comment">% y'=FUNC(y) (i.e. the partial derivatives of FUNC) at variable value</span>
+0007 <span class="comment">% column vector X. FUNC is a function handle and depends only on the</span>
+0008 <span class="comment">% variable values. Implemented is the finite difference approach in that</span>
+0009 <span class="comment">% df/dx_k is approximated by 1/e_k * (FUNC(X+h*e_k/2)-FUNC(X-h*e_k/2))</span>
+0010 <span class="comment">% (centered differences) with sufficiently small stepsize h. The size of</span>
+0011 <span class="comment">% the matrix will be length(FUNC(X)) times length(X), and is usually</span>
+0012 <span class="comment">% quadratic for ODE systems.</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">% J = NUMERICAL_JACOBIAN(FUNC,X,EPSILON,METHOD) allows to tune the stepsize</span>
+0015 <span class="comment">% EPSILON (default: 1e-6) and to deviate from the default of centered</span>
+0016 <span class="comment">% differences by setting METHOD to 'forward' for forward differences</span>
+0017 <span class="comment">% (FUNC(X+EPSILON*e_k)-FUNC(X)) or to 'backward' for backward differences</span>
+0018 <span class="comment">% in the derivative computation (FUNC(X)-FUNC(X-EPSILON*e_k)). Note that</span>
+0019 <span class="comment">% centered differences are considered to be more exact in general than the</span>
+0020 <span class="comment">% other two. However, if variable values are close to or at zero, forward</span>
+0021 <span class="comment">% differences could be more appropriate to capture the function behavior.</span>
+0022 <span class="comment">%</span>
+0023 <span class="comment">% Example</span>
+0024 <span class="comment">%   J = numerical_jacobian(@(x)func_POSm4(1,x,klin,knonlin),[1 2 1 1])</span>
+0025 <span class="comment">%</span>
+0026 <span class="comment">% See also: numerical_jacobian_complex()</span>
+0027 
+0028 <span class="comment">%set default value for the perturbation</span>
+0029 <span class="keyword">if</span> nargin&lt;3
+0030     epsilon= 1e-6;
+0031 <span class="keyword">end</span>
+0032 <span class="keyword">if</span> nargin&lt;4
+0033     method=<span class="string">'centered'</span>;
+0034 <span class="keyword">end</span>
+0035 
+0036 
+0037     <span class="comment">%for df/dxi:</span>
+0038 <span class="keyword">for</span> i=1:length(x)
+0039     xplus=x;
+0040     xminus=x;
+0041     <span class="keyword">if</span> strcmp(method, <span class="string">'centered'</span>)
+0042         xplus(i)=xplus(i)+epsilon/2;
+0043         xminus(i)=xminus(i)-epsilon/2;
+0044     <span class="keyword">end</span>
+0045     <span class="keyword">if</span> strcmp(method, <span class="string">'backward'</span>)
+0046         xminus(i)=xminus(i)-epsilon;
+0047     <span class="keyword">end</span>
+0048     <span class="keyword">if</span> strcmp(method,<span class="string">'forward'</span>)
+0049         xplus(i)=xplus(i)+epsilon;
+0050     <span class="keyword">end</span>
+0051     J_temp=(feval(func,xplus)-feval(func,xminus))/epsilon;
+0052     <span class="keyword">if</span> i==1 <span class="comment">%during the first run - initialize J</span>
+0053         J=zeros(length(J_temp),length(x));
+0054     <span class="keyword">end</span>
+0055     J(:,i)=J_temp; <span class="comment">%fill the Jacobian for df/dxi</span>
+0056 <span class="keyword">end</span>
+0057</pre></div>
+
+<hr>
+  <address>
+    Generated on Wed 24-Jun-2020 09:38:33 by
+    <strong>
+      <a href="http://www.artefact.tk/software/matlab/m2html/" title="MATLAB Documentation in HTML">m2html</a>
+    </strong>
+    &copy; 2005
+  </address>
+</hr>
+
+</div>
+
+</body>
+</html>

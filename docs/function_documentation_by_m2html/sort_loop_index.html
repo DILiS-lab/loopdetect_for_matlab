@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Description of sort_loop_index</title>
+  <meta name="keywords" content="sort_loop_index">
+  <meta name="description" content="SORT_LOOP_INDEX Sort the loop indices such that the smallest index comes">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="designer" content="anhvhm, vmeomeo">
+  <meta name="robots" content="index, follow">
+  <link rel="stylesheet" href="../css/loopdetect-docs.css">
+
+  <style>
+  .subtitle {
+    margin-top: -18px;
+    margin-bottom: 28px;
+    color: var(--muted);
+    font-size: 1.15rem;
+  }
+
+  .button-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin: 24px 0 32px;
+  }
+
+  .button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 16px;
+    border: 1px solid var(--accent);
+    border-radius: 999px;
+    background: #ffffff;
+    color: var(--accent);
+    font-weight: 700;
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.06);
+  }
+
+  .button:hover {
+    background: var(--accent);
+    color: #ffffff;
+    text-decoration: none;
+  }
+
+  .button.secondary {
+    border-color: var(--border);
+    color: #1f2937;
+  }
+
+  .button.secondary:hover {
+    border-color: #f4a261;
+    background: #fff7ed;
+    color: var(--accent-dark);
+  }
+
+  .button.disabled {
+    border-color: var(--border);
+    background: #f8fafc;
+    color: var(--muted);
+    cursor: default;
+  }
+
+  .button.disabled:hover {
+    background: #f8fafc;
+    color: var(--muted);
+  }
+
+  .figure {
+    margin: 28px 0 10px;
+    text-align: center;
+  }
+
+  .figure img {
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    background: #ffffff;
+  }
+
+  .caption {
+    max-width: 820px;
+    margin: 0 auto 28px;
+    color: var(--muted);
+    font-size: 0.95rem;
+    text-align: center;
+  }
+
+  .note {
+    margin: 24px 0;
+    padding: 16px 18px;
+    border-left: 4px solid var(--accent);
+    border-radius: 12px;
+    background: #fff7ed;
+  }
+
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin: 18px 0 28px;
+  }
+
+  .card {
+    padding: 18px;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    background: #f8fafc;
+  }
+
+  .card h3 {
+    margin-top: 0;
+    color: var(--accent);
+  }
+
+  @media (max-width: 760px) {
+    .cards {
+      grid-template-columns: 1fr;
+    }
+
+    .button-row {
+      display: block;
+    }
+
+    .button {
+      width: 100%;
+      margin-bottom: 10px;
+    }
+  }
+  </style>
+</head>
+
+<body>
+<a name="_top"></a>
+
+<div class="content">
+
+  <!-- <table class="navigation">
+    <tr>
+      <td>
+        <a href="../index.html" class="nav-link nav-link-left">
+          <img alt="<" border="0" src="../img/left.svg" width="30">
+          <span>Main Page</span>
+        </a>
+      </td>
+      <td>
+        <a href="index.html" class="nav-link nav-link-right">
+          <span>Function Documentation</span>
+          <img alt=">" border="0" src="../img/right.svg" width="30">
+        </a>
+      </td>
+    </tr>
+  </table> -->
+
+  <div class="breadcrumbs">
+    <a href="../index.html">Home</a> &gt;
+    <a href="index.html">LoopDetect_for_Matlab</a> &gt;
+    sort_loop_index.m
+  </div>
+
+<h1>sort_loop_index
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../img/up.png" width="30"></a></h2>
+<div class="box"><strong>SORT_LOOP_INDEX Sort the loop indices such that the smallest index comes</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../img/up.png" width="30"></a></h2>
+<div class="box"><strong>function[loop_list_sorted]=sort_loop_index(loop_list) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../img/up.png" width="30"></a></h2>
+<div class="fragment"><pre class="comment">SORT_LOOP_INDEX Sort the loop indices such that the smallest index comes
+first.
+
+ LOOP_LIST_SORTED=SORT_LOOP_INDEX(LOOP_LIST)
+ The input LOOP_LIST has the form of the output of functions from the LoopDetect
+ function suite, or at least one column named &quot;loop&quot; that contains a cell
+ array with each entry capturing the order of the node indices (integer values) forming the loop.
+
+Example
+   J = [-1 0 0 -1; 1 -1 0 1; 0 1 -1 0; 0 0 1 -1];
+   loop_t = find_loops(J);
+   loop_t.loop{1}
+   loop_t_sorted=sort_loop_index(loop_t);
+   loop_t_sorted.loop{1}
+ 
+ See also <a href="find_loops.html" class="code" title="function [loop_tab] = find_loops(A_in,max_num_loops)">FIND_LOOPS</a>, <a href="find_loops_noscc.html" class="code" title="function [loop_tab] = find_loops_noscc(A_in,max_num_loops)">FIND_LOOPS_NOSCC</a>, <a href="find_loops_vset.html" class="code" title="function[loop_rep,loop_rep_index,jac_rep,jac_rep_index]=find_loops_vset(func, vset, max_num_loops,compute_full_list)">FIND_LOOPS_VSET</a></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../img/up.png" width="30"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="compare_loop_list.html" class="code" title="function[ind_a_id,ind_a_switch,ind_a_notin,ind_b_id,ind_b_switch]=compare_loop_list(loop_list_a,loop_list_b)">compare_loop_list</a>	COMPARE_LOOP_LIST Compare two lists of loops.</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../img/up.png" width="30"></a></h2>
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function[outvec]=sort_vector(inputvec)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../img/up.png" width="30"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function[loop_list_sorted]=sort_loop_index(loop_list)</a>
+0002 <span class="comment">%SORT_LOOP_INDEX Sort the loop indices such that the smallest index comes</span>
+0003 <span class="comment">%first.</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% LOOP_LIST_SORTED=SORT_LOOP_INDEX(LOOP_LIST)</span>
+0006 <span class="comment">% The input LOOP_LIST has the form of the output of functions from the LoopDetect</span>
+0007 <span class="comment">% function suite, or at least one column named &quot;loop&quot; that contains a cell</span>
+0008 <span class="comment">% array with each entry capturing the order of the node indices (integer values) forming the loop.</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">%Example</span>
+0011 <span class="comment">%   J = [-1 0 0 -1; 1 -1 0 1; 0 1 -1 0; 0 0 1 -1];</span>
+0012 <span class="comment">%   loop_t = find_loops(J);</span>
+0013 <span class="comment">%   loop_t.loop{1}</span>
+0014 <span class="comment">%   loop_t_sorted=sort_loop_index(loop_t);</span>
+0015 <span class="comment">%   loop_t_sorted.loop{1}</span>
+0016 <span class="comment">%</span>
+0017 <span class="comment">% See also FIND_LOOPS, FIND_LOOPS_NOSCC, FIND_LOOPS_VSET</span>
+0018 
+0019 <a name="_sub1" href="#_subfunctions" class="code">function[outvec]=sort_vector(inputvec)</a>
+0020     [a,b]=min(inputvec);
+0021     outvec=[inputvec(b:end),inputvec(2:b)];
+0022 <span class="keyword">end</span>
+0023 
+0024 loop_list_sorted_loops=cellfun(@<a href="#_sub1" class="code" title="subfunction[outvec]=sort_vector(inputvec)">sort_vector</a>,loop_list.loop,<span class="string">'UniformOutput'</span>,false);
+0025 
+0026 loop_list_sorted=loop_list;
+0027 <span class="comment">%replace the loop lists by sorted loop lists</span>
+0028 loop_list_sorted.loop=loop_list_sorted_loops;
+0029 <span class="keyword">end</span>
+0030</pre></div>
+
+<hr>
+  <address>
+    Generated on Wed 24-Jun-2020 09:38:33 by
+    <strong>
+      <a href="http://www.artefact.tk/software/matlab/m2html/" title="MATLAB Documentation in HTML">m2html</a>
+    </strong>
+    &copy; 2005
+  </address>
+</hr>
+
+</div>
+
+</body>
+</html>
