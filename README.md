@@ -1,5 +1,17 @@
 # LoopDetect_for_Matlab
 
+<p align="center">
+  <a href="https://github.com/DILiS-lab/loopdetect">
+    <img src="https://img.shields.io/badge/Python-implementation-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python implementation">
+  </a>
+  <a href="https://github.com/DILiS-lab/LoopDetectR">
+    <img src="https://img.shields.io/badge/R-implementation-276DC3?style=for-the-badge&logo=r&logoColor=white" alt="R implementation">
+  </a>
+  <a href="https://github.com/DILiS-lab/loopdetect_for_matlab">
+    <img src="https://img.shields.io/badge/MATLAB-implementation-orange?style=for-the-badge&logo=mathworks&logoColor=white" alt="MATLAB implementation">
+  </a>
+</p>
+
 LoopDetect_for_Matlab is a MATLAB package for detecting feedback loops in ordinary differential equation (ODE) models.
 
 In this package, a feedback loop, also called a cycle or circuit, is defined as a path from one node to itself without visiting any other node more than once. Nodes correspond to variables of the ODE system. For each detected loop, the package reports the loop length and whether the loop is positive or negative.
